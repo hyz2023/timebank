@@ -1,0 +1,123 @@
+import { useState, useEffect } from 'react';
+import useStore from '../store';
+
+export default function TimerPage() {
+    const timers = useStore((s) => s.timers);
+    const clearExpiredTimers = useStore((s) => s.clearExpiredTimers);
+    const [now, setNow] = useState(Date.now());
+
+    // 每秒更新
+    useEffect(() => {
+        const interval = setInterval(() => setNow(Date.now()), 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const activeTimers = timers.filter((t) => t.endTime > now);
+    const expiredTimers = timers.filter((t) => t.endTime <= now);
+
+    const formatTime = (ms) => {
+        if (ms <= 0) return '00:00';
+        const totalSec = Math.floor(ms / 1000);
+        const min = Math.floor(totalSec / 60);
+        const sec = totalSec % 60;
+        return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    };
+
+    return (
+        <div className="space-y-4">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <span className="text-lg">⏱️</span>
+                    <h2 className="text-sky font-bold text-lg">飞行计时</h2>
+                </div>
+                {expiredTimers.length > 0 && (
+                    <button
+                        className="text-xs text-cloud-dark bg-navy-light px-3 py-1 rounded-full"
+                        onClick={clearExpiredTimers}
+                    >
+                        清除已到站 ×{expiredTimers.length}
+                    </button>
+                )}
+            </div>
+
+            {timers.length === 0 ? (
+                <div className="card-comic text-center py-10">
+                    <div className="relative z-10">
+                        <div className="text-4xl mb-3 opacity-40">✈️</div>
+                        <p className="text-cloud-dark text-sm">暂无飞行计划</p>
+                        <p className="text-cloud-dark text-xs mt-1">兑换游戏时间后，计时器会出现在这里</p>
+                    </div>
+                </div>
+            ) : (
+                <div className="space-y-3">
+                    {timers.map((timer) => {
+                        const remaining = timer.endTime - now;
+                        const isActive = remaining > 0;
+                        const totalMs = timer.minutes * 60 * 1000;
+                        const progress = isActive ? Math.max(0, 1 - remaining / totalMs) : 1;
+                        const circumference = 2 * Math.PI * 54;
+
+                        return (
+                            <div
+                                key={timer.id}
+                                className={`card-comic ${!isActive ? 'border-red/30' : 'animate-pulse-glow'}`}
+                            >
+                                <div className="relative z-10 flex items-center gap-4">
+                                    {/* 环形进度条 */}
+                                    <div className="relative w-24 h-24 shrink-0">
+                                        <svg className="w-full h-full progress-ring" viewBox="0 0 120 120">
+                                            {/* 背景圆 */}
+                                            <circle
+                                                cx="60" cy="60" r="54"
+                                                fill="none"
+                                                stroke="rgba(79,195,247,0.1)"
+                                                strokeWidth="6"
+                                            />
+                                            {/* 进度圆 */}
+                                            <circle
+                                                cx="60" cy="60" r="54"
+                                                fill="none"
+                                                stroke={isActive ? '#4fc3f7' : '#ef5350'}
+                                                strokeWidth="6"
+                                                strokeLinecap="round"
+                                                strokeDasharray={circumference}
+                                                strokeDashoffset={circumference * (1 - progress)}
+                                                style={{ transition: 'stroke-dashoffset 1s linear' }}
+                                            />
+                                        </svg>
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <span className={`font-black text-lg ${isActive ? 'text-white' : 'text-red'}`}>
+                                                {isActive ? formatTime(remaining) : '到站'}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* 信息 */}
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="text-xl">{isActive ? '✈️' : '🛬'}</span>
+                                            <span className="font-bold text-white">{timer.label}</span>
+                                        </div>
+                                        <p className="text-xs text-cloud-dark mb-1">
+                                            总时长 {timer.minutes} 分钟
+                                        </p>
+                                        <p className="text-xs text-cloud-dark">
+                                            {isActive ? (
+                                                <>起飞 {new Date(timer.startTime).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</>
+                                            ) : (
+                                                <span className="text-red font-bold">⚠️ 时间到！</span>
+                                            )}
+                                        </p>
+                                    </div>
+
+                                    {/* 状态指示 */}
+                                    <div className={`w-3 h-3 rounded-full shrink-0 ${isActive ? 'bg-green animate-pulse' : 'bg-red'}`} />
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
+        </div>
+    );
+}
