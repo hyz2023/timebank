@@ -96,12 +96,25 @@ npm run build
 
 ### 4. 项目部署 (Deployment)
 
-由于此项目是纯前端（SPA/静态页面），无服务端依赖，因此十分适合托管在免费静态网站服务上：
-- **GitHub Pages**: 使用 [gh-pages](https://www.npmjs.com/package/gh-pages) 工具或 GitHub Actions，将 `dist` 目录发布。
-- **Vercel** 或者 **Netlify**: 直接绑定本代码仓库的 main 分支，构建命令设定为 `npm run build`，输出目录设定为 `dist`，即可自动触发部署。
-- **本地化部署**: 如果在家中有一台 NAS 或者闲置电脑运行 Nginx/Caddy 等 Web Server，也可以直接将 `dist` 挂载访问。
+由于此项目是纯前端（SPA/静态页面），无服务端依赖，我们推荐使用 **Vercel** 进行一键免费部署。本项目所有数据都存储在用户设备的 LocalStorage/IndexedDB 中，因此部署到 Vercel 后，各个设备之间的数据完全独立且支持离线使用。
 
-部署完成后，由于未来可能引入 PWA 特性，建议使用 `HTTPS` 来让应用更安全并支持所有现代 Web API（如添加到主屏幕等）。
+#### Vercel 自动化部署步骤：
+1. **准备代码库**：确保您的代码已完全推送到 GitHub 仓库（如 `hyz2023/timebank`）。
+2. **登录 Vercel**：访问 [Vercel 官网](https://vercel.com/) 并使用您的 GitHub 账号登录。
+3. **导入项目**：
+   - 在面板中点击 **"Add New..." -> "Project"**。
+   - 在弹出的 GitHub 仓库列表中，找到您的 `timebank` 项目并点击 **"Import"**。
+4. **配置部署选项**（Vercel 通常会自动识别 Vite 项目）：
+   - **Framework Preset**: 确认被识别为 `Vite`。
+   - **Build Command**: 默认应该为 `npm run build`。
+   - **Output Directory**: 默认应该为 `dist`。
+5. **点击部署**：点击 **"Deploy"** 按钮，等待大约 1-2 分钟，部署即可完成。
+
+**部署后说明**：
+- **完全免费**：提供免费的 HTTPS 域名和自动 CDN。
+- **自动更新 (CI/CD)**：后续只要向 GitHub 的主分支（如 `main`）推送代码，Vercel 会立刻自动拉取并发布最新版本，无需手动干预。
+
+*其他替代托管方案：您也可以按照类似方式绑定 GitHub 仓库部署到 Netlify，或者使用 GitHub Pages。由于可能引入 PWA 特性，请确保最终访问链接为 `HTTPS` 以支持现代 Web API（如添加到主屏幕）。*
 
 ---
 
