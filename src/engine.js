@@ -37,10 +37,11 @@ export const EXCHANGE_TIERS = [
     { id: 'basic', name: '基础档', label: '短途飞行', cost: 10, baseMinutes: 15, bonusMinutes: 0, totalMinutes: 15, rate: 1.5, icon: '🛩️' },
     { id: 'advanced', name: '进阶档', label: '国内航线', cost: 20, baseMinutes: 30, bonusMinutes: 2, totalMinutes: 32, rate: 1.6, icon: '✈️' },
     { id: 'premium', name: '高级档', label: '国际航线', cost: 30, baseMinutes: 45, bonusMinutes: 4, totalMinutes: 49, rate: 1.63, icon: '🚀' },
+    { id: 'intercontinental', name: '洲际档', label: '洲际航线', cost: 40, baseMinutes: 60, bonusMinutes: 8, totalMinutes: 68, rate: 1.7, icon: '🌍' },
 ];
 
 /**
- * 获取今日已兑换的总分钟数
+ * 获取今日已兑换的总分钟数（不含赠送分钟）
  */
 export const getTodayRedeemedMinutes = (logs) => {
     const today = new Date();
@@ -49,7 +50,7 @@ export const getTodayRedeemedMinutes = (logs) => {
 
     return logs
         .filter(l => l.type === 'REDEEM' && l.timestamp >= todayStart)
-        .reduce((sum, l) => sum + (l.minutes || 0), 0);
+        .reduce((sum, l) => sum + (l.baseMinutes || 0), 0);
 };
 
 /**
