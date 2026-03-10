@@ -60,7 +60,7 @@ export default function RedeemPage() {
             </div>
 
             {EXCHANGE_TIERS.map((tier) => {
-                const check = canRedeem(tier.totalMinutes, balance, tier.cost, logs);
+                const check = canRedeem(tier, balance, logs);
                 const disabled = !check.ok;
 
                 return (

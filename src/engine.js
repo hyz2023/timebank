@@ -66,15 +66,16 @@ export const getDailyLimit = () => {
 /**
  * 校验是否可以兑换
  */
-export const canRedeem = (minutesToRedeem, balance, costPoints, logs) => {
-    if (balance < costPoints) {
+export const canRedeem = (tier, balance, logs) => {
+    if (balance < tier.cost) {
         return { ok: false, reason: '积分不足' };
     }
 
     const todayRedeemed = getTodayRedeemedMinutes(logs);
     const limit = getDailyLimit();
 
-    if (todayRedeemed + minutesToRedeem > limit) {
+    // 检查基础时长是否超出限额（赠送时长不占额度）
+    if (todayRedeemed + tier.baseMinutes > limit) {
         return { ok: false, reason: `今日额度已达上限 (${limit}分钟)` };
     }
 
