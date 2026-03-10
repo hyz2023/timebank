@@ -75,6 +75,7 @@ const useStore = create(
                     taskName: tier.label,
                     pointsChange: -tier.cost,
                     minutes: tier.totalMinutes,
+                    baseMinutes: tier.baseMinutes,
                     timestamp: Date.now(),
                     meta: { tier: tier.id },
                 };

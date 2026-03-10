@@ -50,7 +50,7 @@ export const getTodayRedeemedMinutes = (logs) => {
 
     return logs
         .filter(l => l.type === 'REDEEM' && l.timestamp >= todayStart)
-        .reduce((sum, l) => sum + (l.baseMinutes || 0), 0);
+        .reduce((sum, l) => sum + (l.baseMinutes || l.minutes || 0), 0);
 };
 
 /**
