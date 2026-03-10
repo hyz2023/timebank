@@ -139,14 +139,18 @@ export const Analytics = () => {
               {healthScore.label}
             </div>
             <div className="text-gray-400 text-sm mt-1">
-              {healthScore.ratio}% 的活动在 21:30 之前
+              {healthScore.ratio}% 的活动在 21:00 之前
             </div>
           </div>
           <div className="text-right">
-            <div className="text-gray-400 text-sm">21:30 前兑换</div>
-            <div className="text-xl font-bold text-emerald-400">{redeemTimeData.beforeCurfew} 次</div>
-            <div className="text-gray-400 text-sm mt-1">21:30 后兑换</div>
-            <div className="text-xl font-bold text-red-400">{redeemTimeData.afterCurfew} 次</div>
+            <div className="text-gray-400 text-sm">14:00 前</div>
+            <div className="text-lg font-bold text-emerald-400">{redeemTimeData.before14} 次</div>
+            <div className="text-gray-400 text-sm">14:00-19:00</div>
+            <div className="text-lg font-bold text-blue-400">{redeemTimeData.before19} 次</div>
+            <div className="text-gray-400 text-sm">19:00-21:00</div>
+            <div className="text-lg font-bold text-amber-400">{redeemTimeData.before21} 次</div>
+            <div className="text-gray-400 text-sm">21:00 后</div>
+            <div className="text-lg font-bold text-red-400">{redeemTimeData.after21} 次</div>
           </div>
         </div>
       </div>
