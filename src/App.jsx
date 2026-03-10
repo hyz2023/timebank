@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import useStore from './store';
 import EarnPage from './components/EarnPage';
 import RedeemPage from './components/RedeemPage';
@@ -6,6 +7,7 @@ import TimerPage from './components/TimerPage';
 import LogsPage from './components/LogsPage';
 import AdminPanel from './components/AdminPanel';
 import PointsAnimation from './components/PointsAnimation';
+import Analytics from './pages/Analytics';
 
 const TABS = [
     { id: 'earn', label: '任务', icon: '🎯' },
@@ -30,13 +32,9 @@ export default function App() {
     // 活跃计时器数量
     const activeTimerCount = timers.filter((t) => t.endTime > Date.now()).length;
 
-    // 长按设置按钮进 Admin
-    let pressTimer = null;
-    const handleSettingsDown = () => {
-        pressTimer = setTimeout(() => setShowAdmin(true), 1500);
-    };
-    const handleSettingsUp = () => {
-        if (pressTimer) clearTimeout(pressTimer);
+    // 单击设置按钮进 Admin
+    const handleSettingsClick = () => {
+        setShowAdmin(true);
     };
 
     // 积分动画触发
@@ -61,7 +59,9 @@ export default function App() {
     };
 
     return (
-        <div className="relative min-h-dvh pb-20">
+        <Routes>
+            <Route path="/" element={
+                <div className="relative min-h-dvh pb-20">
             {/* ===== 天空背景装饰 ===== */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ maxWidth: 480, margin: '0 auto' }}>
                 {/* 星星 */}
@@ -82,10 +82,8 @@ export default function App() {
                     </div>
                     <button
                         className="text-xl opacity-60 active:opacity-100 transition-opacity p-2"
-                        onPointerDown={handleSettingsDown}
-                        onPointerUp={handleSettingsUp}
-                        onPointerLeave={handleSettingsUp}
-                        aria-label="设置（长按进入管理）"
+                        onClick={handleSettingsClick}
+                        aria-label="设置"
                     >
                         ⚙️
                     </button>
@@ -101,7 +99,7 @@ export default function App() {
                                 className="comic-title text-5xl text-gold animate-count-up"
                                 style={{ textShadow: '0 0 20px rgba(255,213,79,0.4), 2px 2px 0 rgba(0,0,0,0.3)' }}
                             >
-                                {balance}
+                                {typeof balance === 'number' ? balance.toFixed(2) : balance}
                             </span>
                             <span className="text-gold-dark text-sm font-bold">pts</span>
                         </div>
@@ -147,5 +145,8 @@ export default function App() {
             {/* ===== Admin 面板 ===== */}
             {showAdmin && <AdminPanel onClose={() => setShowAdmin(false)} />}
         </div>
+            } />
+            <Route path="/analytics" element={<Analytics />} />
+        </Routes>
     );
 }
