@@ -41,10 +41,10 @@ export default function LogsPage() {
             ) : (
                 Object.entries(grouped).map(([date, dateLogs]) => (
                     <div key={date}>
-                        <div className="flex items-center gap-2 mb-2">
-                            <div className="h-px flex-1 bg-sky/10" />
-                            <span className="text-xs text-cloud-dark font-medium">{date}</span>
-                            <div className="h-px flex-1 bg-sky/10" />
+                        <div className="flex items-center gap-3 mb-3">
+                            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-sky/30 to-transparent" />
+                            <span className="text-xs text-sky font-bold tracking-wider">{date}</span>
+                            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-sky/30 to-transparent" />
                         </div>
 
                         <div className="space-y-2">
