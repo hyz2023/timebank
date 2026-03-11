@@ -90,23 +90,36 @@ export default function EarnPage({ onPointsEarned }) {
                         </div>
 
                         <div className="space-y-3">
-                            <button
-                                className="btn-secondary w-full flex items-center justify-center gap-2"
-                                onClick={() => handleComplete(confirmTask.id, false)}
-                            >
-                                <span>👍</span>
-                                <span>普通完成</span>
-                                <span className="text-xs opacity-70">+{Math.floor(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount))}分</span>
-                            </button>
+                            {confirmTask.bonusPoints > 0 ? (
+                                <>
+                                    <button
+                                        className="btn-secondary w-full flex items-center justify-center gap-2"
+                                        onClick={() => handleComplete(confirmTask.id, false)}
+                                    >
+                                        <span>👍</span>
+                                        <span>Excellent</span>
+                                        <span className="text-xs opacity-70">+{Math.floor(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount))}分</span>
+                                    </button>
 
-                            <button
-                                className="btn-primary w-full flex items-center justify-center gap-2"
-                                onClick={() => handleComplete(confirmTask.id, true)}
-                            >
-                                <span>⭐</span>
-                                <span>完美完成</span>
-                                <span className="text-xs opacity-90">+{Math.floor(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount)) + confirmTask.bonusPoints}分</span>
-                            </button>
+                                    <button
+                                        className="btn-primary w-full flex items-center justify-center gap-2"
+                                        onClick={() => handleComplete(confirmTask.id, true)}
+                                    >
+                                        <span>⭐</span>
+                                        <span>Perfect</span>
+                                        <span className="text-xs opacity-90">+{Math.floor(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount)) + confirmTask.bonusPoints}分</span>
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    className="btn-primary w-full flex items-center justify-center gap-2"
+                                    onClick={() => handleComplete(confirmTask.id, false)}
+                                >
+                                    <span>👍</span>
+                                    <span>Excellent</span>
+                                    <span className="text-xs opacity-70">+{Math.floor(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount))}分</span>
+                                </button>
+                            )}
 
                             <button
                                 className="w-full text-center text-cloud-dark text-sm py-2"

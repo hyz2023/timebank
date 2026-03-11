@@ -105,6 +105,33 @@ const useStore = create(
                 }));
             },
 
+            // === 暂停定时器 ===
+            pauseTimer: (timerId) => {
+                const now = Date.now();
+                set((state) => ({
+                    timers: state.timers.map((t) => {
+                        if (t.id === timerId && t.endTime > now) {
+                            const remaining = t.endTime - now;
+                            return { ...t, paused: true, remainingMs: remaining, endTime: null };
+                        }
+                        return t;
+                    }),
+                }));
+            },
+
+            // === 继续定时器 ===
+            resumeTimer: (timerId) => {
+                const now = Date.now();
+                set((state) => ({
+                    timers: state.timers.map((t) => {
+                        if (t.id === timerId && t.paused && t.remainingMs > 0) {
+                            return { ...t, paused: false, endTime: now + t.remainingMs, remainingMs: null };
+                        }
+                        return t;
+                    }),
+                }));
+            },
+
             // === Admin: 更新任务配置 ===
             updateTask: (taskId, updates) => {
                 set((state) => ({

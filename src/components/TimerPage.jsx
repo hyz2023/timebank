@@ -4,6 +4,8 @@ import useStore from '../store';
 export default function TimerPage() {
     const timers = useStore((s) => s.timers);
     const clearExpiredTimers = useStore((s) => s.clearExpiredTimers);
+    const pauseTimer = useStore((s) => s.pauseTimer);
+    const resumeTimer = useStore((s) => s.resumeTimer);
     const [now, setNow] = useState(Date.now());
 
     // 每秒更新
@@ -71,7 +73,9 @@ export default function TimerPage() {
                             </div>
                             <div className="space-y-3">
                                 {dateTimers.map((timer) => {
-                        const remaining = timer.endTime - now;
+                        // 处理暂停状态
+                        const isPaused = timer.paused === true;
+                        const remaining = isPaused ? timer.remainingMs : (timer.endTime - now);
                         const isActive = remaining > 0;
                         const totalMs = timer.minutes * 60 * 1000;
                         const progress = isActive ? Math.max(0, 1 - remaining / totalMs) : 1;
@@ -80,7 +84,7 @@ export default function TimerPage() {
                         return (
                             <div
                                 key={timer.id}
-                                className={`card-comic ${!isActive ? 'border-red/30' : 'animate-pulse-glow'}`}
+                                className={`card-comic ${!isActive ? 'border-red/30' : isPaused ? 'border-yellow/30' : 'animate-pulse-glow'}`}
                             >
                                 <div className="relative z-10 flex items-center gap-4">
                                     {/* 环形进度条 */}
@@ -97,7 +101,7 @@ export default function TimerPage() {
                                             <circle
                                                 cx="60" cy="60" r="54"
                                                 fill="none"
-                                                stroke={isActive ? '#4fc3f7' : '#ef5350'}
+                                                stroke={isActive ? (isPaused ? '#fbbf24' : '#4fc3f7') : '#ef5350'}
                                                 strokeWidth="6"
                                                 strokeLinecap="round"
                                                 strokeDasharray={circumference}
@@ -115,14 +119,16 @@ export default function TimerPage() {
                                     {/* 信息 */}
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <span className="text-xl">{isActive ? '✈️' : '🛬'}</span>
+                                            <span className="text-xl">{isActive ? (isPaused ? '⏸️' : '✈️') : '🛬'}</span>
                                             <span className="font-bold text-white">{timer.label}</span>
                                         </div>
                                         <p className="text-xs text-cloud-dark mb-1">
                                             总时长 {timer.minutes} 分钟
                                         </p>
                                         <p className="text-xs text-cloud-dark">
-                                            {isActive ? (
+                                            {isPaused ? (
+                                                <span className="text-yellow font-bold">⏸️ 已暂停</span>
+                                            ) : isActive ? (
                                                 <>起飞 {new Date(timer.startTime).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</>
                                             ) : (
                                                 <span className="text-red font-bold">⚠️ 时间到！</span>
@@ -130,8 +136,28 @@ export default function TimerPage() {
                                         </p>
                                     </div>
 
-                                    {/* 状态指示 */}
-                                    <div className={`w-3 h-3 rounded-full shrink-0 ${isActive ? 'bg-green animate-pulse' : 'bg-red'}`} />
+                                    {/* 控制按钮 */}
+                                    <div className="flex flex-col gap-2 shrink-0">
+                                        {isActive && !isPaused && (
+                                            <button
+                                                className="px-3 py-1.5 bg-yellow/20 hover:bg-yellow/30 text-yellow rounded-lg text-xs font-bold transition-colors"
+                                                onClick={() => pauseTimer(timer.id)}
+                                            >
+                                                ⏸️ 暂停
+                                            </button>
+                                        )}
+                                        {isActive && isPaused && (
+                                            <button
+                                                className="px-3 py-1.5 bg-green/20 hover:bg-green/30 text-green rounded-lg text-xs font-bold transition-colors"
+                                                onClick={() => resumeTimer(timer.id)}
+                                            >
+                                                ▶️ 继续
+                                            </button>
+                                        )}
+                                        {!isActive && (
+                                            <div className="w-3 h-3 rounded-full bg-red" />
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         );
