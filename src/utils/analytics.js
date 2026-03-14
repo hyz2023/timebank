@@ -78,18 +78,38 @@ export const calculateDailyTrend = (logs, days) => {
   const { start, end } = getDateRange(days);
   const filteredLogs = filterLogsByDateRange(logs, start, end);
   
-  // 按日期分组
+  if (filteredLogs.length === 0) return [];
+  
   const dailyData = {};
   const dateKeys = [];
   
-  // 初始化所有日期
-  for (let i = days - 1; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    date.setHours(0, 0, 0, 0);
-    const dateStr = date.toISOString().slice(0, 10);
-    dailyData[dateStr] = { date: dateStr, points: 0, tasks: 0, redeems: 0 };
-    dateKeys.push(dateStr);
+  if (days === null || days === undefined) {
+    // 全部数据：从第一条记录开始到今日
+    const timestamps = filteredLogs.map(l => l.timestamp);
+    const minTimestamp = Math.min(...timestamps);
+    const maxTimestamp = Math.max(...timestamps);
+    
+    const startDate = new Date(minTimestamp);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(maxTimestamp);
+    endDate.setHours(23, 59, 59, 999);
+    
+    // 生成从起始日期到结束日期的所有日期
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      const dateStr = d.toISOString().slice(0, 10);
+      dailyData[dateStr] = { date: dateStr, points: 0, tasks: 0, redeems: 0 };
+      dateKeys.push(dateStr);
+    }
+  } else {
+    // 固定天数模式（现有逻辑）
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      date.setHours(0, 0, 0, 0);
+      const dateStr = date.toISOString().slice(0, 10);
+      dailyData[dateStr] = { date: dateStr, points: 0, tasks: 0, redeems: 0 };
+      dateKeys.push(dateStr);
+    }
   }
   
   // 聚合数据
