@@ -30,8 +30,16 @@ export const getDateRange = (days) => {
   const end = new Date();
   end.setHours(23, 59, 59, 999);
   const start = new Date();
-  start.setDate(start.getDate() - days + 1);
-  start.setHours(0, 0, 0, 0);
+  
+  if (days === null || days === undefined) {
+    // 全部数据：返回一个很早的日期（如 2020-01-01）
+    start.setFullYear(2020, 0, 1);
+    start.setHours(0, 0, 0, 0);
+  } else {
+    start.setDate(start.getDate() - days + 1);
+    start.setHours(0, 0, 0, 0);
+  }
+  
   return { start: start.getTime(), end: end.getTime() };
 };
 

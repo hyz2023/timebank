@@ -95,10 +95,22 @@ export const Analytics = () => {
           最近 7 天
         </button>
         <button
+          onClick={() => setDays(14)}
+          className={`px-4 py-2 rounded-lg ${days === 14 ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
+        >
+          最近 14 天
+        </button>
+        <button
           onClick={() => setDays(30)}
           className={`px-4 py-2 rounded-lg ${days === 30 ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
         >
           最近 30 天
+        </button>
+        <button
+          onClick={() => setDays(null)}
+          className={`px-4 py-2 rounded-lg ${days === null ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
+        >
+          全部数据
         </button>
       </div>
 
