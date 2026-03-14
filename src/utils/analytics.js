@@ -242,11 +242,6 @@ export const calculateMetrics = (logs, days) => {
   const { start, end } = getDateRange(days);
   const currentLogs = filterLogsByDateRange(logs, start, end);
   
-  // 计算上一周期
-  const prevStart = start - (end - start + 1);
-  const prevEnd = start - 1;
-  const prevLogs = filterLogsByDateRange(logs, prevStart, prevEnd);
-  
   // 当前周期数据
   const currentPoints = currentLogs
     .filter(l => l.type === 'EARN')
@@ -255,7 +250,20 @@ export const calculateMetrics = (logs, days) => {
   const currentTasks = currentLogs.filter(l => l.type === 'EARN').length;
   const currentRedeems = currentLogs.filter(l => l.type === 'REDEEM').length;
   
-  // 上一周期数据
+  // 全部数据模式：不计算对比
+  if (days === null || days === undefined) {
+    return {
+      points: { value: currentPoints, change: '-', trend: null },
+      tasks: { value: currentTasks, change: '-', trend: null },
+      redeems: { value: currentRedeems, change: '-', trend: null }
+    };
+  }
+  
+  // 固定天数模式：计算上一周期对比
+  const prevStart = start - (end - start + 1);
+  const prevEnd = start - 1;
+  const prevLogs = filterLogsByDateRange(logs, prevStart, prevEnd);
+  
   const prevPoints = prevLogs
     .filter(l => l.type === 'EARN')
     .reduce((sum, l) => sum + l.pointsChange, 0);
@@ -263,7 +271,6 @@ export const calculateMetrics = (logs, days) => {
   const prevTasks = prevLogs.filter(l => l.type === 'EARN').length;
   const prevRedeems = prevLogs.filter(l => l.type === 'REDEEM').length;
   
-  // 计算变化百分比
   const calcChange = (current, prev) => {
     if (prev === 0) return { change: 100, trend: 'up' };
     const change = ((current - prev) / prev) * 100;

@@ -121,21 +121,42 @@ export const Analytics = () => {
             <div className="text-gray-400 text-sm mb-2">总积分</div>
             <div className="text-3xl font-bold text-white">{metrics.points.value}</div>
             <div className={`text-sm mt-2 ${getTrendColorClass(metrics.points.trend)}`}>
-              {getTrendIcon(metrics.points.trend)} {metrics.points.change}% 较上期
+              {metrics.points.trend && (
+                <>
+                  {getTrendIcon(metrics.points.trend)} {metrics.points.change}% 较上期
+                </>
+              )}
+              {!metrics.points.trend && (
+                <span className="text-gray-500">全部数据</span>
+              )}
             </div>
           </div>
           <div className="bg-gray-800 rounded-lg p-6">
             <div className="text-gray-400 text-sm mb-2">任务完成</div>
             <div className="text-3xl font-bold text-white">{metrics.tasks.value} 次</div>
             <div className={`text-sm mt-2 ${getTrendColorClass(metrics.tasks.trend)}`}>
-              {getTrendIcon(metrics.tasks.trend)} {metrics.tasks.change}% 较上期
+              {metrics.tasks.trend && (
+                <>
+                  {getTrendIcon(metrics.tasks.trend)} {metrics.tasks.change}% 较上期
+                </>
+              )}
+              {!metrics.tasks.trend && (
+                <span className="text-gray-500">全部数据</span>
+              )}
             </div>
           </div>
           <div className="bg-gray-800 rounded-lg p-6">
             <div className="text-gray-400 text-sm mb-2">兑换次数</div>
             <div className="text-3xl font-bold text-white">{metrics.redeems.value} 次</div>
             <div className={`text-sm mt-2 ${getTrendColorClass(metrics.redeems.trend)}`}>
-              {getTrendIcon(metrics.redeems.trend)} {metrics.redeems.change}% 较上期
+              {metrics.redeems.trend && (
+                <>
+                  {getTrendIcon(metrics.redeems.trend)} {metrics.redeems.change}% 较上期
+                </>
+              )}
+              {!metrics.redeems.trend && (
+                <span className="text-gray-500">全部数据</span>
+              )}
             </div>
           </div>
         </div>
