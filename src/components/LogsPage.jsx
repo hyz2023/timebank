@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import useStore from '../store';
 
 export default function LogsPage() {
+    const navigate = useNavigate();
     const logs = useStore((s) => s.logs);
 
     // 按日期分组
@@ -28,6 +30,13 @@ export default function LogsPage() {
                 <span className="text-lg">📋</span>
                 <h2 className="text-sky font-bold text-lg">飞行日志</h2>
                 <span className="text-xs text-cloud-dark ml-auto">共 {logs.length} 条</span>
+                <button
+                    onClick={() => navigate('/analytics')}
+                    className="text-xl hover:scale-110 active:scale-95 transition-transform duration-150 cursor-pointer bg-sky/10 hover:bg-sky/20 rounded-lg p-1.5"
+                    title="前往数据看板"
+                >
+                    📊
+                </button>
             </div>
 
             {logs.length === 0 ? (
