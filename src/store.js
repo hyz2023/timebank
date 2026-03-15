@@ -14,7 +14,7 @@ const useStore = create(
             // === 配置 ===
             config: {
                 dailyExchangeLimitWeekday: 60,
-                dailyExchangeLimitWeekend: 120,
+                dailyExchangeLimitHoliday: 90,
             },
 
             // === 每日重置 ===

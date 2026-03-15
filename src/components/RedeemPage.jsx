@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import useStore from '../store';
-import { EXCHANGE_TIERS, canRedeem, getTodayRedeemedMinutes, getDailyLimit } from '../engine';
+import { EXCHANGE_TIERS, canRedeem, getTodayRedeemedMinutes, getDailyLimit, isHoliday } from '../engine';
 
 export default function RedeemPage() {
     const balance = useStore((s) => s.balance);
@@ -11,7 +11,7 @@ export default function RedeemPage() {
     const todayRedeemed = getTodayRedeemedMinutes(logs);
     const dailyLimit = getDailyLimit();
     const remaining = Math.max(0, dailyLimit - todayRedeemed);
-    const isWeekend = [0, 6].includes(new Date().getDay());
+    const isHolidayToday = isHoliday();
 
     const handleRedeem = () => {
         if (!confirmTier) return;
@@ -29,8 +29,8 @@ export default function RedeemPage() {
                             <span className="text-lg">🛫</span>
                             <h2 className="text-sky font-bold">今日飞行额度</h2>
                         </div>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${isWeekend ? 'bg-green/20 text-green' : 'bg-sky/20 text-sky'}`}>
-                            {isWeekend ? '周末' : '工作日'}
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${isHolidayToday ? 'bg-green/20 text-green' : 'bg-sky/20 text-sky'}`}>
+                            {isHolidayToday ? '节假日' : '工作日'}
                         </span>
                     </div>
 
