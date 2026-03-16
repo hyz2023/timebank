@@ -17,7 +17,8 @@ export const calculatePoints = (task, isPerfect) => {
     let points = task.basePoints * multiplier;
     if (isPerfect) points += task.bonusPoints;
 
-    return Math.floor(points);
+    // 保留小数点后两位
+    return Math.round(points * 100) / 100;
 };
 
 /**
