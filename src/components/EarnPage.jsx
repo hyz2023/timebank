@@ -107,7 +107,7 @@ export default function EarnPage({ onPointsEarned }) {
                                     >
                                         <span>⭐</span>
                                         <span>Perfect</span>
-                                        <span className="text-xs opacity-90">+{((confirmTask.basePoints * getDecayRate(confirmTask.dailyCount)) + confirmTask.bonusPoints).toFixed(2)}分</span>
+                                        <span className="text-xs opacity-90">+{((confirmTask.basePoints + confirmTask.bonusPoints) * getDecayRate(confirmTask.dailyCount)).toFixed(2)}分</span>
                                     </button>
                                 </>
                             ) : (

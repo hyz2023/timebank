@@ -14,8 +14,9 @@ export const calculatePoints = (task, isPerfect) => {
     if (count >= 5) multiplier = 0.5;
     else if (count >= 3) multiplier = 0.75;
 
+    // 基础分和完美奖励都参与衰减
     let points = task.basePoints * multiplier;
-    if (isPerfect) points += task.bonusPoints;
+    if (isPerfect) points += task.bonusPoints * multiplier;
 
     // 保留小数点后两位
     return Math.round(points * 100) / 100;
