@@ -98,7 +98,7 @@ export default function EarnPage({ onPointsEarned }) {
                                     >
                                         <span>👍</span>
                                         <span>Excellent</span>
-                                        <span className="text-xs opacity-70">+{Math.floor(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount))}分</span>
+                                        <span className="text-xs opacity-70">+{(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount)).toFixed(2)}分</span>
                                     </button>
 
                                     <button
@@ -107,7 +107,7 @@ export default function EarnPage({ onPointsEarned }) {
                                     >
                                         <span>⭐</span>
                                         <span>Perfect</span>
-                                        <span className="text-xs opacity-90">+{Math.floor(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount)) + confirmTask.bonusPoints}分</span>
+                                        <span className="text-xs opacity-90">+{((confirmTask.basePoints * getDecayRate(confirmTask.dailyCount)) + confirmTask.bonusPoints).toFixed(2)}分</span>
                                     </button>
                                 </>
                             ) : (
@@ -117,7 +117,7 @@ export default function EarnPage({ onPointsEarned }) {
                                 >
                                     <span>👍</span>
                                     <span>Excellent</span>
-                                    <span className="text-xs opacity-70">+{Math.floor(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount))}分</span>
+                                    <span className="text-xs opacity-70">+{(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount)).toFixed(2)}分</span>
                                 </button>
                             )}
 
