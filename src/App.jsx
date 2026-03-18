@@ -21,13 +21,23 @@ export default function App() {
     const [showAdmin, setShowAdmin] = useState(false);
     const [pointsAnim, setPointsAnim] = useState(null);
     const balance = useStore((s) => s.balance);
-    const checkDailyReset = useStore((s) => s.checkDailyReset);
+    const loadData = useStore((s) => s.loadData);
+    const loading = useStore((s) => s.loading);
+    const error = useStore((s) => s.error);
     const timers = useStore((s) => s.timers);
 
-    // 开屏日期重置检查
+    // === 初始化：从服务端加载数据 ===
     useEffect(() => {
-        checkDailyReset();
-    }, [checkDailyReset]);
+        loadData();
+    }, [loadData]);
+
+    // === 每小时刷新数据 ===
+    useEffect(() => {
+        const interval = setInterval(() => {
+            loadData();
+        }, 60 * 60 * 1000);
+        return () => clearInterval(interval);
+    }, [loadData]);
 
     // 活跃计时器数量
     const activeTimerCount = timers.filter((t) => t.endTime > Date.now()).length;
@@ -109,7 +119,25 @@ export default function App() {
 
             {/* ===== 页面内容 ===== */}
             <div className="px-4 pb-4">
-                {renderPage()}
+                {loading ? (
+                    <div className="flex flex-col items-center justify-center py-20">
+                        <div className="text-6xl mb-4 animate-bounce">✈️</div>
+                        <p className="text-cloud text-lg font-bold">正在加载数据...</p>
+                    </div>
+                ) : error ? (
+                    <div className="card-comic border-red/20">
+                        <p className="text-red font-bold mb-2">⚠️ 数据加载失败</p>
+                        <p className="text-cloud-dark text-sm mb-4">{error}</p>
+                        <button
+                            className="btn-primary w-full"
+                            onClick={loadData}
+                        >
+                            重新加载
+                        </button>
+                    </div>
+                ) : (
+                    renderPage()
+                )}
             </div>
 
             {/* ===== 底部 Tab 栏 ===== */}

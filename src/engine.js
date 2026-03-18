@@ -147,15 +147,24 @@ export const isToday = (dateStr) => {
  * 获取今天的日期字符串 (YYYY-MM-DD)
  */
 export const getTodayStr = () => {
-    return new Date().toISOString().slice(0, 10);
+    // 使用本地时间（北京时间 UTC+8）
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 };
 
 /**
  * 默认任务配置
  */
 export const DEFAULT_TASKS = [
-    { id: 't1', name: '练字', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '✍️', desc: '每页练字' },
-    { id: 't2', name: '单词', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📖', desc: '背诵单词' },
-    { id: 't3', name: '口算', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🔢', desc: '口算一页' },
-    { id: 't4', name: '数学题', basePoints: 5, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📐', desc: '数学练习题' },
+    { id: 't1', name: '练字', basePoints: 3, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🖊️', desc: '55 字练字只能在周一到周五做' },
+    { id: 't2', name: '单词', basePoints: 6, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📖', desc: '百词斩打卡' },
+    { id: 't3', name: '口算', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🔢', desc: '计算小超市 1 页' },
+    { id: 't4', name: '数学题', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📐', desc: '164 练习题' },
+    { id: 't5', name: '英语学习', basePoints: 12, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📺', desc: '满分英语 1 视频 + 练习题' },
+    { id: 't6', name: '练字一页（仅周末）', basePoints: 10, bonusPoints: 1, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🐅', desc: '写一页书法只能在休息日做' },
+    { id: 't7', name: '英语单词复习 80 词', basePoints: 4, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🏰', desc: '百词斩填词 80 词' },
+    { id: 't8', name: '语文练习卷 1/4 页', basePoints: 8, bonusPoints: 4, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📝', desc: '语文练习卷 1/4 页' },
 ];

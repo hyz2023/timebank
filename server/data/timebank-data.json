@@ -1,0 +1,103 @@
+{
+  "balance": 2.25,
+  "tasks": [
+    {
+      "id": "t1",
+      "name": "练字",
+      "basePoints": 3,
+      "bonusPoints": 0,
+      "dailyCount": 0,
+      "lastUpdate": "2026-03-18",
+      "icon": "🖊️",
+      "desc": "55 字练字只能在周一到周五做"
+    },
+    {
+      "id": "t2",
+      "name": "单词",
+      "basePoints": 6,
+      "bonusPoints": 0,
+      "dailyCount": 0,
+      "lastUpdate": "2026-03-18",
+      "icon": "📖",
+      "desc": "百词斩打卡"
+    },
+    {
+      "id": "t3",
+      "name": "口算",
+      "basePoints": 4,
+      "bonusPoints": 2,
+      "dailyCount": 0,
+      "lastUpdate": "2026-03-18",
+      "icon": "🔢",
+      "desc": "计算小超市 1 页"
+    },
+    {
+      "id": "t4",
+      "name": "数学题",
+      "basePoints": 4,
+      "bonusPoints": 2,
+      "dailyCount": 0,
+      "lastUpdate": "2026-03-18",
+      "icon": "📐",
+      "desc": "164 练习题"
+    },
+    {
+      "id": "t5",
+      "name": "英语学习",
+      "basePoints": 12,
+      "bonusPoints": 0,
+      "dailyCount": 0,
+      "lastUpdate": "2026-03-18",
+      "icon": "📺",
+      "desc": "满分英语 1 视频 + 练习题"
+    },
+    {
+      "id": "t6",
+      "name": "练字一页（仅周末）",
+      "basePoints": 10,
+      "bonusPoints": 1,
+      "dailyCount": 0,
+      "lastUpdate": "2026-03-18",
+      "icon": "🐅",
+      "desc": "写一页书法只能在休息日做"
+    },
+    {
+      "id": "t7",
+      "name": "英语单词复习 80 词",
+      "basePoints": 4,
+      "bonusPoints": 0,
+      "dailyCount": 0,
+      "lastUpdate": "2026-03-18",
+      "icon": "🏰",
+      "desc": "百词斩填词 80 词"
+    },
+    {
+      "id": "t8",
+      "name": "语文练习卷 1/4 页",
+      "basePoints": 8,
+      "bonusPoints": 4,
+      "dailyCount": 0,
+      "lastUpdate": "2026-03-18",
+      "icon": "📝",
+      "desc": "语文练习卷 1/4 页"
+    }
+  ],
+  "logs": [
+    {
+      "id": "l_1773794489778",
+      "type": "EARN",
+      "taskId": null,
+      "taskName": "管理员调整",
+      "pointsChange": 2.25,
+      "timestamp": 1773794489778,
+      "meta": {
+        "admin": true
+      }
+    }
+  ],
+  "timers": [],
+  "config": {
+    "dailyExchangeLimitWeekday": 60,
+    "dailyExchangeLimitHoliday": 90
+  }
+}

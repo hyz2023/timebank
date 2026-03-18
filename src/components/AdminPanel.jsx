@@ -10,6 +10,7 @@ export default function AdminPanel({ onClose }) {
     const adjustBalance = useStore((s) => s.adjustBalance);
     const exportData = useStore((s) => s.exportData);
     const importData = useStore((s) => s.importData);
+    const loadData = useStore((s) => s.loadData);
 
     const [activeSection, setActiveSection] = useState('tasks');
     const [adjustAmount, setAdjustAmount] = useState('');
@@ -17,7 +18,10 @@ export default function AdminPanel({ onClose }) {
     const [newTaskBase, setNewTaskBase] = useState('4');
     const [newTaskBonus, setNewTaskBonus] = useState('2');
     const [newTaskIcon, setNewTaskIcon] = useState('📝');
+    const [newTaskDesc, setNewTaskDesc] = useState('');
     const [importMsg, setImportMsg] = useState('');
+    const [editingDesc, setEditingDesc] = useState({}); // 本地编辑状态
+    const [editingPoints, setEditingPoints] = useState({}); // 本地积分编辑状态 {taskId: {basePoints, bonusPoints}}
     const fileInputRef = useRef(null);
 
     const handleExport = () => {
@@ -50,12 +54,45 @@ export default function AdminPanel({ onClose }) {
             basePoints: parseInt(newTaskBase) || 4,
             bonusPoints: parseInt(newTaskBonus) || 2,
             icon: newTaskIcon || '📝',
-            desc: newTaskName.trim(),
+            desc: newTaskDesc || newTaskName.trim(),
         });
         setNewTaskName('');
         setNewTaskBase('4');
         setNewTaskBonus('2');
         setNewTaskIcon('📝');
+        setNewTaskDesc('');
+    };
+
+    // 描述输入框失去焦点时保存
+    const handleDescBlur = (taskId, value) => {
+        const task = tasks.find(t => t.id === taskId);
+        if (task && value !== task.desc) {
+            updateTask(taskId, { desc: value });
+        }
+        setEditingDesc(prev => {
+            const next = { ...prev };
+            delete next[taskId];
+            return next;
+        });
+    };
+
+    // 积分输入框失去焦点时保存
+    const handlePointsBlur = (taskId, field, value) => {
+        const task = tasks.find(t => t.id === taskId);
+        const numValue = parseInt(value) || 0;
+        if (task && task[field] !== numValue) {
+            updateTask(taskId, { [field]: numValue });
+        }
+        setEditingPoints(prev => {
+            const next = { ...prev };
+            if (next[taskId]) {
+                delete next[taskId][field];
+                if (Object.keys(next[taskId]).length === 0) {
+                    delete next[taskId];
+                }
+            }
+            return next;
+        });
     };
 
     const sections = [
@@ -75,7 +112,7 @@ export default function AdminPanel({ onClose }) {
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="sticky top-0 z-10 px-5 pt-5 pb-3" style={{ background: 'linear-gradient(180deg, #16213e, rgba(22,33,62,0.95))' }}>
+                <div className="sticky top-0 z-50 px-5 pt-5 pb-3" style={{ background: 'linear-gradient(180deg, #16213e, rgba(22,33,62,0.98))' }}>
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
                             <span className="text-xl">🔧</span>
@@ -110,9 +147,9 @@ export default function AdminPanel({ onClose }) {
                                     <div className="relative z-10">
                                         <div className="flex items-center gap-2 mb-3">
                                             <span className="text-xl">{task.icon}</span>
-                                            <span className="font-bold text-white flex-1">{task.name}</span>
+                                            <span className="font-bold text-white flex-1 min-w-0">{task.name}</span>
                                             <button
-                                                className="text-red text-xs px-2 py-1 rounded bg-red/10"
+                                                className="text-red text-xs px-3 py-1 rounded bg-red/10 whitespace-nowrap"
                                                 onClick={() => {
                                                     if (confirm(`确认删除任务「${task.name}」？`)) removeTask(task.id);
                                                 }}
@@ -125,19 +162,41 @@ export default function AdminPanel({ onClose }) {
                                             <div>
                                                 <label className="text-xs text-cloud-dark block mb-1">基础分</label>
                                                 <input
-                                                    type="number"
+                                                    type="number" step="0.01"
                                                     className="w-full bg-navy-dark text-white rounded-lg px-3 py-2 text-sm border border-sky/20 focus:border-sky/50 outline-none"
-                                                    value={task.basePoints}
-                                                    onChange={(e) => updateTask(task.id, { basePoints: parseInt(e.target.value) || 0 })}
+                                                    value={editingPoints[task.id]?.basePoints ?? task.basePoints}
+                                                    onChange={(e) => setEditingPoints(prev => ({
+                                                        ...prev,
+                                                        [task.id]: { ...prev[task.id], basePoints: e.target.value }
+                                                    }))}
+                                                    onBlur={(e) => handlePointsBlur(task.id, 'basePoints', e.target.value)}
                                                 />
                                             </div>
                                             <div>
                                                 <label className="text-xs text-cloud-dark block mb-1">奖励分</label>
                                                 <input
-                                                    type="number"
+                                                    type="number" step="0.01"
                                                     className="w-full bg-navy-dark text-white rounded-lg px-3 py-2 text-sm border border-sky/20 focus:border-sky/50 outline-none"
-                                                    value={task.bonusPoints}
-                                                    onChange={(e) => updateTask(task.id, { bonusPoints: parseInt(e.target.value) || 0 })}
+                                                    value={editingPoints[task.id]?.bonusPoints ?? task.bonusPoints}
+                                                    onChange={(e) => setEditingPoints(prev => ({
+                                                        ...prev,
+                                                        [task.id]: { ...prev[task.id], bonusPoints: e.target.value }
+                                                    }))}
+                                                    onBlur={(e) => handlePointsBlur(task.id, 'bonusPoints', e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-xs text-cloud-dark block mb-1">描述</label>
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    className="w-full bg-navy-dark text-white rounded-lg px-3 py-2 text-sm border border-sky/20 focus:border-sky/50 outline-none"
+                                                    value={editingDesc.hasOwnProperty(task.id) ? editingDesc[task.id] : (task.desc || '')}
+                                                    onChange={(e) => setEditingDesc(prev => ({ ...prev, [task.id]: e.target.value }))}
+                                                    onBlur={(e) => handleDescBlur(task.id, e.target.value)}
+                                                    placeholder="例如：55 字练字只能在周一到周五做"
                                                 />
                                             </div>
                                         </div>
@@ -165,16 +224,16 @@ export default function AdminPanel({ onClose }) {
                                             onChange={(e) => setNewTaskName(e.target.value)}
                                         />
                                     </div>
-                                    <div className="grid grid-cols-3 gap-2">
+                                    <div className="grid grid-cols-3 gap-2 mb-3">
                                         <input
-                                            type="number"
+                                            type="number" step="0.01"
                                             placeholder="基础分"
                                             className="bg-navy-dark text-white rounded-lg px-3 py-2 text-sm border border-sky/20 outline-none"
                                             value={newTaskBase}
                                             onChange={(e) => setNewTaskBase(e.target.value)}
                                         />
                                         <input
-                                            type="number"
+                                            type="number" step="0.01"
                                             placeholder="奖励分"
                                             className="bg-navy-dark text-white rounded-lg px-3 py-2 text-sm border border-sky/20 outline-none"
                                             value={newTaskBonus}
@@ -183,6 +242,15 @@ export default function AdminPanel({ onClose }) {
                                         <button className="btn-primary text-sm py-2" onClick={handleAddTask}>
                                             添加
                                         </button>
+                                    </div>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            placeholder="任务描述（可选）"
+                                            className="w-full bg-navy-dark text-white rounded-lg px-3 py-2 text-sm border border-sky/20 focus:border-sky/50 outline-none"
+                                            value={newTaskDesc || ''}
+                                            onChange={(e) => setNewTaskDesc(e.target.value)}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -199,16 +267,16 @@ export default function AdminPanel({ onClose }) {
                                 <label className="text-xs text-cloud-dark block mb-1">调整数额（正数加分，负数减分）</label>
                                 <div className="flex gap-2">
                                     <input
-                                        type="number"
-                                        className="flex-1 bg-navy-dark text-white rounded-lg px-3 py-2 text-sm border border-sky/20 outline-none"
+                                        type="number" step="0.01"
+                                        className="flex-[2] min-w-0 bg-navy-dark text-white rounded-lg px-3 py-2 text-sm border border-sky/20 focus:border-sky/50 outline-none"
                                         placeholder="例如: 10 或 -5"
                                         value={adjustAmount}
                                         onChange={(e) => setAdjustAmount(e.target.value)}
                                     />
                                     <button
-                                        className="btn-primary text-sm"
+                                        className="btn-primary text-sm whitespace-nowrap flex-[1] max-w-fit"
                                         onClick={() => {
-                                            const amt = parseInt(adjustAmount);
+                                            const amt = parseFloat(adjustAmount);
                                             if (!isNaN(amt) && amt !== 0) {
                                                 adjustBalance(amt);
                                                 setAdjustAmount('');
@@ -242,6 +310,22 @@ export default function AdminPanel({ onClose }) {
                     {/* ===== 数据管理 ===== */}
                     {activeSection === 'data' && (
                         <div className="space-y-4">
+                            <div className="card-comic border-sky/20">
+                                <div className="relative z-10">
+                                    <p className="text-sm font-bold text-sky mb-2">🔄 刷新数据</p>
+                                    <p className="text-xs text-cloud-dark mb-3">从服务端重新加载最新数据（每日计数会自动重置）。</p>
+                                    <button
+                                        className="btn-primary w-full text-sm"
+                                        onClick={async () => {
+                                            await loadData();
+                                            alert('✅ 数据已刷新！');
+                                        }}
+                                    >
+                                        立即刷新
+                                    </button>
+                                </div>
+                            </div>
+
                             <div className="card-comic">
                                 <div className="relative z-10">
                                     <p className="text-sm font-bold text-white mb-2">📤 导出备份</p>
