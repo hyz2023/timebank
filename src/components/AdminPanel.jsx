@@ -21,7 +21,9 @@ export default function AdminPanel({ onClose }) {
     const [newTaskDesc, setNewTaskDesc] = useState('');
     const [importMsg, setImportMsg] = useState('');
     const [editingDesc, setEditingDesc] = useState({}); // 本地编辑状态
-    const [editingPoints, setEditingPoints] = useState({}); // 本地积分编辑状态 {taskId: {basePoints, bonusPoints}}
+    const [editingPoints, setEditingPoints] = useState({}); // 本地积分编辑状态
+    const [editingName, setEditingName] = useState({}); // 本地任务名编辑状态
+    const [editingIcon, setEditingIcon] = useState({}); // 本地图标编辑状态
     const fileInputRef = useRef(null);
 
     const handleExport = () => {
@@ -70,6 +72,32 @@ export default function AdminPanel({ onClose }) {
             updateTask(taskId, { desc: value });
         }
         setEditingDesc(prev => {
+            const next = { ...prev };
+            delete next[taskId];
+            return next;
+        });
+    };
+
+    // 任务名输入框失去焦点时保存
+    const handleNameBlur = (taskId, value) => {
+        const task = tasks.find(t => t.id === taskId);
+        if (task && value.trim() && value !== task.name) {
+            updateTask(taskId, { name: value.trim() });
+        }
+        setEditingName(prev => {
+            const next = { ...prev };
+            delete next[taskId];
+            return next;
+        });
+    };
+
+    // 图标输入框失去焦点时保存
+    const handleIconBlur = (taskId, value) => {
+        const task = tasks.find(t => t.id === taskId);
+        if (task && value && value !== task.icon) {
+            updateTask(taskId, { icon: value });
+        }
+        setEditingIcon(prev => {
             const next = { ...prev };
             delete next[taskId];
             return next;
@@ -146,8 +174,20 @@ export default function AdminPanel({ onClose }) {
                                 <div key={task.id} className="card-comic">
                                     <div className="relative z-10">
                                         <div className="flex items-center gap-2 mb-3">
-                                            <span className="text-xl">{task.icon}</span>
-                                            <span className="font-bold text-white flex-1 min-w-0">{task.name}</span>
+                                            <input
+                                                type="text"
+                                                className="w-10 bg-navy-dark text-white rounded-lg px-1 py-1 text-xl text-center border border-sky/20 focus:border-sky/50 outline-none"
+                                                value={editingIcon.hasOwnProperty(task.id) ? editingIcon[task.id] : task.icon}
+                                                onChange={(e) => setEditingIcon(prev => ({ ...prev, [task.id]: e.target.value }))}
+                                                onBlur={(e) => handleIconBlur(task.id, e.target.value)}
+                                            />
+                                            <input
+                                                type="text"
+                                                className="flex-1 min-w-0 bg-navy-dark text-white rounded-lg px-2 py-1 text-sm font-bold border border-sky/20 focus:border-sky/50 outline-none"
+                                                value={editingName.hasOwnProperty(task.id) ? editingName[task.id] : task.name}
+                                                onChange={(e) => setEditingName(prev => ({ ...prev, [task.id]: e.target.value }))}
+                                                onBlur={(e) => handleNameBlur(task.id, e.target.value)}
+                                            />
                                             <button
                                                 className="text-red text-xs px-3 py-1 rounded bg-red/10 whitespace-nowrap"
                                                 onClick={() => {

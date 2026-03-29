@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBS 精英住校生系统 - S 级生存协议</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .header .version {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .level-card {
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid;
+        }
+
+        .level-s {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            border-color: #4ade80;
+        }
+
+        .level-a {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            border-color: #fbbf24;
+        }
+
+        .level-b {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            border-color: #ef4444;
+        }
+
+        .level-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .level-criteria {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .level-reward {
+            font-size: 16px;
+            font-weight: 700;
+            background: rgba(255,255,255,0.5);
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .shield-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .shield-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bonus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .bonus-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .bonus-days {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .bonus-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #059669;
+            margin-top: 5px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .expectation {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .expectation-amount {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .emoji {
+            font-size: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 22px;
+            }
+            .content {
+                padding: 20px;
+            }
+            .expectation-amount {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 EBS 精英住校生系统</h1>
+            <p class="subtitle">S 级生存协议</p>
+            <span class="version">V1.5 最终版</span>
+        </div>
+
+        <div class="content">
+            <div class="info-grid">
+                <div class="info-card">
+                    <strong>📅 执行周期</strong>
+                    2026 年 3 月 21 日 - 2026 年 7 月 31 日
+                </div>
+                <div class="info-card">
+                    <strong>⏰ 结算节点</strong>
+                    每日入睡前 (Daily Bedtime Review)
+                </div>
+                <div class="info-card">
+                    <strong>💰 启动资金</strong>
+                    ￥100.00 信用金
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="emoji">📊</span>
+                    每日账户判定
+                </h2>
+
+                <div class="level-card level-s">
+                    <div class="level-title">
+                        <span class="emoji">🟢</span>
+                        S 级完美通关 (Elite Performance)
+                    </div>
+                    <div class="level-criteria">
+                        <strong>判定标准（需同时满足）：</strong>
+                        <ul style="margin: 10px 0 10px 20px;">
+                            <li>静音起航/收航：出门、进门、上下学路途中，情绪稳定，无高声嚷嚷</li>
+                            <li>背景音过滤：面对家人/长辈唠叨，礼貌回应，不回怼、不翻白眼</li>
+                            <li>燃料与领地：睡前完成正常进食，并独立整理好次日书包及衣物</li>
+                            <li>环境友好：全天无摔门、无砸东西、无高分贝尖叫抗议</li>
+                        </ul>
+                    </div>
+                    <div class="level-reward">
+                        💰 每日收益：15 元 (基础分) + 10 元 (精英挑战奖) = <strong>￥25.00</strong>
+                    </div>
+                </div>
+
+                <div class="level-card level-a">
+                    <div class="level-title">
+                        <span class="emoji">🟡</span>
+                        安全通关 (Safety Mode)
+                    </div>
+                    <div class="level-criteria">
+                        <strong>判定标准（出现任意一项）：</strong>
+                        <ul style="margin: 10px 0 10px 20px;">
+                            <li>发生大吼大叫</li>
+                            <li>发生摔门行为</li>
+                            <li>进出门情绪失控</li>
+                            <li>曾以拒食抗议（但结算前已补齐）</li>
+                        </ul>
+                    </div>
+                    <div class="level-reward">
+                        💰 每日收益：<strong>￥15.00</strong>（仅基础分，精英奖失效）
+                    </div>
+                </div>
+
+                <div class="level-card level-b">
+                    <div class="level-title">
+                        <span class="emoji">🔴</span>
+                        系统熔断 (Critical Failure)
+                    </div>
+                    <div class="level-criteria">
+                        <strong>判定标准：</strong>
+                        <ul style="margin: 10px 0 10px 20px;">
+                            <li>发生肢体冲突（动手、推搡）</li>
+                            <li>毁坏财物（砸碎物品、踢坏门窗）</li>
+                        </ul>
+                    </div>
+                    <div class="level-reward">
+                        ⚠️ 后果：奖金池扣除 50 元；连胜天数重置为 0
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="emoji">🛡️</span>
+                    特殊插件：精英容错护盾
+                </h2>
+                <div class="shield-section">
+                    <div class="shield-title">
+                        <span class="emoji">🏆</span>
+                        The Shield
+                    </div>
+                    <p style="margin-bottom: 10px;">
+                        <strong>获取方式：</strong>连续 14 天 达成 S 级，系统自动激活 [金色护盾]
+                    </p>
+                    <p style="margin-bottom: 10px;">
+                        <strong>护盾功能：</strong>若发生"黄灯行为"（如吼叫、摔门），可申请消耗护盾，保持连胜天数不归零（当日 10 元奖励仍需扣除）
+                    </p>
+                    <p>
+                        <strong>奖励兑现：</strong>若护盾直到第 21 天结算时仍未被使用，可自动兑换为 <strong>￥30 元</strong> 现金
+                    </p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="emoji">🎁</span>
+                    阶梯奖励与新手保护
+                </h2>
+                
+                <div style="background: #fef3c7; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #f59e0b;">
+                    <strong>🆕 新手试炼周 (3.21 - 3.23)</strong>
+                    <p style="margin-top: 5px; font-size: 14px;">即使出现黄灯行为，不扣除 10 元精英奖，仅作模拟记录与复盘</p>
+                </div>
+
+                <div class="bonus-grid">
+                    <div class="bonus-card">
+                        <div class="bonus-days">第 3 天</div>
+                        <div class="bonus-amount">+￥20</div>
+                    </div>
+                    <div class="bonus-card">
+                        <div class="bonus-days">第 7 天</div>
+                        <div class="bonus-amount">+￥50</div>
+                    </div>
+                    <div class="bonus-card">
+                        <div class="bonus-days">第 21 天</div>
+                        <div class="bonus-amount">+￥200</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="emoji">🏫</span>
+                    学校反馈追溯机制
+                </h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>反馈类型</th>
+                            <th>追溯处理</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>暴力/砸物</td>
+                            <td>追溯至发生日，按🔴等级 3 处理（扣 50 元 + 断连胜）</td>
+                        </tr>
+                        <tr>
+                            <td>大吼/不服从</td>
+                            <td>追溯至发生日，补扣该日 10 元 精英挑战奖</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="emoji">💎</span>
+                    资产预期
+                </h2>
+                <div class="expectation">
+                    <div>理论最高总额</div>
+                    <div class="expectation-amount">￥5,295.00</div>
+                    <div style="font-size: 14px; opacity: 0.9;">
+                        (含 100 元启动金)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📝 创建日期：2026 年 3 月 18 日</p>
+            <p>💪 加油，精英住校生！</p>
+        </div>
+    </div>
+</body>
+</html>

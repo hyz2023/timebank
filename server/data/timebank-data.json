@@ -1,5 +1,5 @@
 {
-  "balance": 2.25,
+  "balance": 20,
   "tasks": [
     {
       "id": "t1",
@@ -7,7 +7,7 @@
       "basePoints": 3,
       "bonusPoints": 0,
       "dailyCount": 0,
-      "lastUpdate": "2026-03-18",
+      "lastUpdate": "2026-03-29",
       "icon": "🖊️",
       "desc": "55 字练字只能在周一到周五做"
     },
@@ -16,8 +16,8 @@
       "name": "单词",
       "basePoints": 6,
       "bonusPoints": 0,
-      "dailyCount": 0,
-      "lastUpdate": "2026-03-18",
+      "dailyCount": 1,
+      "lastUpdate": "2026-03-29",
       "icon": "📖",
       "desc": "百词斩打卡"
     },
@@ -26,8 +26,8 @@
       "name": "口算",
       "basePoints": 4,
       "bonusPoints": 2,
-      "dailyCount": 0,
-      "lastUpdate": "2026-03-18",
+      "dailyCount": 1,
+      "lastUpdate": "2026-03-29",
       "icon": "🔢",
       "desc": "计算小超市 1 页"
     },
@@ -37,7 +37,7 @@
       "basePoints": 4,
       "bonusPoints": 2,
       "dailyCount": 0,
-      "lastUpdate": "2026-03-18",
+      "lastUpdate": "2026-03-29",
       "icon": "📐",
       "desc": "164 练习题"
     },
@@ -47,7 +47,7 @@
       "basePoints": 12,
       "bonusPoints": 0,
       "dailyCount": 0,
-      "lastUpdate": "2026-03-18",
+      "lastUpdate": "2026-03-29",
       "icon": "📺",
       "desc": "满分英语 1 视频 + 练习题"
     },
@@ -57,19 +57,19 @@
       "basePoints": 10,
       "bonusPoints": 1,
       "dailyCount": 0,
-      "lastUpdate": "2026-03-18",
+      "lastUpdate": "2026-03-29",
       "icon": "🐅",
       "desc": "写一页书法只能在休息日做"
     },
     {
       "id": "t7",
-      "name": "英语单词复习 80 词",
+      "name": "英语单词复习 50词",
       "basePoints": 4,
       "bonusPoints": 0,
       "dailyCount": 0,
-      "lastUpdate": "2026-03-18",
+      "lastUpdate": "2026-03-29",
       "icon": "🏰",
-      "desc": "百词斩填词 80 词"
+      "desc": "百词斩填词 50词"
     },
     {
       "id": "t8",
@@ -77,12 +77,1228 @@
       "basePoints": 8,
       "bonusPoints": 4,
       "dailyCount": 0,
-      "lastUpdate": "2026-03-18",
+      "lastUpdate": "2026-03-29",
       "icon": "📝",
       "desc": "语文练习卷 1/4 页"
     }
   ],
   "logs": [
+    {
+      "id": "l_1774750798358",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 6,
+      "timestamp": 1774750798358,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774750682673",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1774750682673,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774681300184",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1774681300184,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774677714810",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774677714810,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774677620886",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774677620886,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774677595124",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1774677595124,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774597734351",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774597734351,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774587235410",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774587235410,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774585320346",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 3,
+      "timestamp": 1774585320346,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1774585318916",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774585318916,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774585314605",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1774585314605,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774567590723",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774567590723,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774567583007",
+      "type": "EARN",
+      "taskId": null,
+      "taskName": "管理员调整",
+      "pointsChange": 4,
+      "timestamp": 1774567583007,
+      "meta": {
+        "admin": true
+      }
+    },
+    {
+      "id": "l_1774533932847",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1774533932847,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774533930854",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1774533930854,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774525625225",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774525625225,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774500409898",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774500409898,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774500264581",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1774500264581,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774447189514",
+      "type": "EARN",
+      "taskId": "t4",
+      "taskName": "数学题",
+      "pointsChange": 6,
+      "timestamp": 1774447189514,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774446602045",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1774446602045,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774443257477",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1774443257477,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774437856033",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774437856033,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774414595164",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774414595164,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774413158508",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 4,
+      "timestamp": 1774413158508,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774412609187",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1774412609187,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774412604725",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 3,
+      "timestamp": 1774412604725,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1774412600292",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774412600292,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774412598553",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774412598553,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774363946421",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 3,
+      "timestamp": 1774363946421,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1774363941801",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 4.5,
+      "timestamp": 1774363941802,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1774356176734",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774356176734,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774355867430",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 4,
+      "timestamp": 1774355867430,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774355864310",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 4,
+      "timestamp": 1774355864310,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774353244279",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1774353244279,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774353241037",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1774353241037,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774345035692",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774345035692,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774345029193",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774345029193,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774345026727",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774345026727,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774345020267",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1774345020267,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774269029212",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "洲际航线",
+      "pointsChange": -40,
+      "minutes": 68,
+      "baseMinutes": 60,
+      "timestamp": 1774269029212,
+      "meta": {
+        "tier": "intercontinental"
+      }
+    },
+    {
+      "id": "l_1774260441953",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1774260441953,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774258323736",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 4,
+      "timestamp": 1774258323736,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774258321035",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 6,
+      "timestamp": 1774258321035,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774257886026",
+      "type": "EARN",
+      "taskId": "t1",
+      "taskName": "练字",
+      "pointsChange": 2.25,
+      "timestamp": 1774257886026,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 0.75,
+        "dailyCount": 4
+      }
+    },
+    {
+      "id": "l_1774257883571",
+      "type": "EARN",
+      "taskId": "t1",
+      "taskName": "练字",
+      "pointsChange": 2.25,
+      "timestamp": 1774257883571,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1774257882580",
+      "type": "EARN",
+      "taskId": "t1",
+      "taskName": "练字",
+      "pointsChange": 3,
+      "timestamp": 1774257882580,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774244239673",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774244239673,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774242932945",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774242932945,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774242775478",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1774242775479,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774242772927",
+      "type": "EARN",
+      "taskId": "t1",
+      "taskName": "练字",
+      "pointsChange": 3,
+      "timestamp": 1774242772927,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774185845615",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774185845615,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774185773087",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1774185773087,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774181864552",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1774181864552,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774181861856",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774181861856,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774177434047",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1774177434047,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1774177429189",
+      "type": "EARN",
+      "taskId": "t6",
+      "taskName": "练字一页（仅周末）",
+      "pointsChange": 10,
+      "timestamp": 1774177429189,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774169581995",
+      "type": "EARN",
+      "taskId": "t6",
+      "taskName": "练字一页（仅周末）",
+      "pointsChange": 11,
+      "timestamp": 1774169581995,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774064835082",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国际航线",
+      "pointsChange": -30,
+      "minutes": 49,
+      "baseMinutes": 45,
+      "timestamp": 1774064835082,
+      "meta": {
+        "tier": "premium"
+      }
+    },
+    {
+      "id": "l_1774064771895",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 3,
+      "timestamp": 1774064771895,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1774064770381",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774064770381,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1774064768608",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1774064768608,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774064763371",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1774064763371,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1774064726489",
+      "type": "EARN",
+      "taskId": "t6",
+      "taskName": "练字一页（仅周末）",
+      "pointsChange": 11,
+      "timestamp": 1774064726490,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773982139871",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "管理员调整",
+      "pointsChange": -10,
+      "timestamp": 1773982139871,
+      "meta": {
+        "admin": true
+      }
+    },
+    {
+      "id": "l_1773982134437",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "管理员调整",
+      "pointsChange": -10,
+      "timestamp": 1773982134437,
+      "meta": {
+        "admin": true
+      }
+    },
+    {
+      "id": "l_1773982119982",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1773982119982,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1773981267221",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 4.5,
+      "timestamp": 1773981267221,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1773981264772",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 6,
+      "timestamp": 1773981264772,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1773981260184",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 6,
+      "timestamp": 1773981260184,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773980888369",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 3,
+      "timestamp": 1773980888369,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1773980882197",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1773980882197,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1773980874829",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1773980874829,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773980860127",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1773980860127,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773980821555",
+      "type": "EARN",
+      "taskId": "t1",
+      "taskName": "练字",
+      "pointsChange": 2.25,
+      "timestamp": 1773980821555,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1773980801909",
+      "type": "EARN",
+      "taskId": "t1",
+      "taskName": "练字",
+      "pointsChange": 3,
+      "timestamp": 1773980801909,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1773980792578",
+      "type": "EARN",
+      "taskId": "t1",
+      "taskName": "练字",
+      "pointsChange": 3,
+      "timestamp": 1773980792578,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773925496222",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1773925496222,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1773924907748",
+      "type": "EARN",
+      "taskId": "t1",
+      "taskName": "练字",
+      "pointsChange": 3,
+      "timestamp": 1773924907748,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1773924906203",
+      "type": "EARN",
+      "taskId": "t1",
+      "taskName": "练字",
+      "pointsChange": 3,
+      "timestamp": 1773924906203,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773924076723",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1773924076723,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773895517979",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1773895517979,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1773894110699",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 4,
+      "timestamp": 1773894110699,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1773894109263",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 6,
+      "timestamp": 1773894109263,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773894036987",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1773894036987,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773894030233",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1773894030233,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773839223241",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1773839223241,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1773835190445",
+      "type": "EARN",
+      "taskId": "t5",
+      "taskName": "英语学习",
+      "pointsChange": 12,
+      "timestamp": 1773835190445,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773829579504",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 80 词",
+      "pointsChange": 4,
+      "timestamp": 1773829579504,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1773809574125",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国内航线",
+      "pointsChange": -20,
+      "minutes": 32,
+      "baseMinutes": 30,
+      "timestamp": 1773809574125,
+      "meta": {
+        "tier": "advanced"
+      }
+    },
+    {
+      "id": "l_1773808097711",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 3,
+      "timestamp": 1773808097711,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1773808079544",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 6,
+      "timestamp": 1773808079544,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1773808044325",
+      "type": "EARN",
+      "taskId": "t3",
+      "taskName": "口算",
+      "pointsChange": 6,
+      "timestamp": 1773808044325,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773807912650",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1773807912650,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1773807883580",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 80 词",
+      "pointsChange": 4,
+      "timestamp": 1773807883580,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
     {
       "id": "l_1773794489778",
       "type": "EARN",
@@ -95,7 +1311,150 @@
       }
     }
   ],
-  "timers": [],
+  "timers": [
+    {
+      "id": "timer_1774677714810",
+      "minutes": 32,
+      "startTime": 1774677714810,
+      "endTime": 1774679634810,
+      "label": "国内航线"
+    },
+    {
+      "id": "timer_1774597734351",
+      "minutes": 32,
+      "startTime": 1774597734351,
+      "endTime": 1774599689256,
+      "label": "国内航线",
+      "remainingMs": null,
+      "paused": false
+    },
+    {
+      "id": "timer_1774587235410",
+      "minutes": 32,
+      "startTime": 1774587235410,
+      "endTime": 1774589155410,
+      "label": "国内航线"
+    },
+    {
+      "id": "timer_1774525625225",
+      "minutes": 32,
+      "startTime": 1774525625225,
+      "endTime": 1774527545225,
+      "label": "国内航线"
+    },
+    {
+      "id": "timer_1774500409898",
+      "minutes": 32,
+      "startTime": 1774500409898,
+      "endTime": 1774502329898,
+      "label": "国内航线"
+    },
+    {
+      "id": "timer_1774437856033",
+      "minutes": 32,
+      "startTime": 1774437856033,
+      "endTime": 1774439787936,
+      "label": "国内航线",
+      "remainingMs": null,
+      "paused": false
+    },
+    {
+      "id": "timer_1774414595164",
+      "minutes": 32,
+      "startTime": 1774414595164,
+      "endTime": 1774416515164,
+      "label": "国内航线"
+    },
+    {
+      "id": "timer_1774356176734",
+      "minutes": 32,
+      "startTime": 1774356176734,
+      "endTime": 1774358118026,
+      "label": "国内航线",
+      "remainingMs": null,
+      "paused": false
+    },
+    {
+      "id": "timer_1774345035692",
+      "minutes": 32,
+      "startTime": 1774345035692,
+      "endTime": 1774346955692,
+      "label": "国内航线"
+    },
+    {
+      "id": "timer_1774269029212",
+      "minutes": 68,
+      "startTime": 1774269029212,
+      "endTime": 1774273109212,
+      "label": "洲际航线"
+    },
+    {
+      "id": "timer_1774185845615",
+      "minutes": 32,
+      "startTime": 1774185845615,
+      "endTime": 1774187765615,
+      "label": "国内航线"
+    },
+    {
+      "id": "timer_1774177434048",
+      "minutes": 32,
+      "startTime": 1774177434048,
+      "endTime": 1774179354048,
+      "label": "国内航线"
+    },
+    {
+      "id": "timer_1774064835082",
+      "minutes": 49,
+      "startTime": 1774064835082,
+      "endTime": 1774067775082,
+      "label": "国际航线"
+    },
+    {
+      "id": "timer_1773982119982",
+      "minutes": 32,
+      "startTime": 1773982119982,
+      "endTime": 1773984146278,
+      "label": "国内航线",
+      "remainingMs": null,
+      "paused": false
+    },
+    {
+      "id": "timer_1773925496222",
+      "minutes": 32,
+      "startTime": 1773925496222,
+      "endTime": 1773927818685,
+      "label": "国内航线",
+      "remainingMs": null,
+      "paused": false
+    },
+    {
+      "id": "timer_1773895517979",
+      "minutes": 32,
+      "startTime": 1773895517979,
+      "endTime": 1773897554235,
+      "label": "国内航线",
+      "remainingMs": null,
+      "paused": false
+    },
+    {
+      "id": "timer_1773839223241",
+      "minutes": 32,
+      "startTime": 1773839223241,
+      "endTime": 1773841633294,
+      "label": "国内航线",
+      "remainingMs": null,
+      "paused": false
+    },
+    {
+      "id": "timer_1773809574126",
+      "minutes": 32,
+      "startTime": 1773809574126,
+      "endTime": 1773811553309,
+      "label": "国内航线",
+      "remainingMs": null,
+      "paused": false
+    }
+  ],
   "config": {
     "dailyExchangeLimitWeekday": 60,
     "dailyExchangeLimitHoliday": 90
