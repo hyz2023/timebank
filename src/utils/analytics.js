@@ -24,15 +24,17 @@ export const getTimePeriod = (timestamp) => {
 };
 
 /**
- * 获取日期范围的时间戳
+ * 获取日期范围的时间戳（本地时区）
  */
 export const getDateRange = (days) => {
-  const end = new Date();
-  end.setHours(23, 59, 59, 999);
+  const now = new Date();
+  
+  // 获取本地日期的起始和结束
+  const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
   const start = new Date();
   
   if (days === null || days === undefined) {
-    // 全部数据：返回一个很早的日期（如 2020-01-01）
+    // 全部数据：返回一个很早的日期
     start.setFullYear(2020, 0, 1);
     start.setHours(0, 0, 0, 0);
   } else {
@@ -44,10 +46,14 @@ export const getDateRange = (days) => {
 };
 
 /**
- * 格式化时间戳为日期字符串
+ * 格式化时间戳为日期字符串（本地时区）
  */
 export const formatDate = (timestamp) => {
-  return new Date(timestamp).toISOString().slice(0, 10);
+  const date = new Date(timestamp);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 /**
@@ -96,7 +102,7 @@ export const calculateDailyTrend = (logs, days) => {
     
     // 生成从起始日期到结束日期的所有日期
     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-      const dateStr = d.toISOString().slice(0, 10);
+      const dateStr = formatDate(d.getTime());
       dailyData[dateStr] = { date: dateStr, points: 0, tasks: 0, redeems: 0 };
       dateKeys.push(dateStr);
     }
@@ -106,7 +112,7 @@ export const calculateDailyTrend = (logs, days) => {
       const date = new Date();
       date.setDate(date.getDate() - i);
       date.setHours(0, 0, 0, 0);
-      const dateStr = date.toISOString().slice(0, 10);
+      const dateStr = formatDate(date.getTime());
       dailyData[dateStr] = { date: dateStr, points: 0, tasks: 0, redeems: 0 };
       dateKeys.push(dateStr);
     }
@@ -125,15 +131,47 @@ export const calculateDailyTrend = (logs, days) => {
     }
   });
   
+  // 只在"全部数据"模式下裁剪两端空数据，固定天数模式保持完整
+  if (days === null || days === undefined) {
+    let startIndex = 0;
+    let endIndex = dateKeys.length - 1;
+    
+    // 找到第一个有数据的日期
+    for (let i = 0; i < dateKeys.length; i++) {
+      if (dailyData[dateKeys[i]].points > 0 || dailyData[dateKeys[i]].tasks > 0 || dailyData[dateKeys[i]].redeems > 0) {
+        startIndex = i;
+        break;
+      }
+    }
+    
+    // 找到最后一个有数据的日期
+    for (let i = dateKeys.length - 1; i >= 0; i--) {
+      if (dailyData[dateKeys[i]].points > 0 || dailyData[dateKeys[i]].tasks > 0 || dailyData[dateKeys[i]].redeems > 0) {
+        endIndex = i;
+        break;
+      }
+    }
+    
+    return dateKeys.slice(startIndex, endIndex + 1).map(key => dailyData[key]);
+  }
+  
+  // 固定天数模式：返回完整日期范围（包括 0 值日期）
   return dateKeys.map(key => dailyData[key]);
 };
 
 /**
  * 计算热力图数据（按小时和星期几）
  */
-export const calculateHeatmapData = (logs, days) => {
+export const calculateHeatmapData = (logs, days, type = null) => {
   const { start, end } = getDateRange(days);
-  const filteredLogs = filterLogsByDateRange(logs, start, end);
+  let filteredLogs = filterLogsByDateRange(logs, start, end);
+  
+  // 如果指定了类型，过滤 EARN 或 REDEEM
+  if (type === 'EARN') {
+    filteredLogs = filteredLogs.filter(l => l.type === 'EARN');
+  } else if (type === 'REDEEM') {
+    filteredLogs = filteredLogs.filter(l => l.type === 'REDEEM');
+  }
   
   // 初始化热力图数据 (7 天 x 24 小时)
   const heatmapData = [];
