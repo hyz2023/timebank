@@ -1,8 +1,8 @@
-# TimeBank Release v1.1.0
+# TimeBank Release v1.3.3
 
 **发布日期：** 2026-04-01  
-**版本：** v1.1.0  
-**Git 标签：** v1.1.0
+**版本：** v1.3.3  
+**Git 标签：** v1.3.3
 
 ---
 
@@ -85,7 +85,7 @@ node server/index.js
 ## 🔄 回滚方法
 
 ```bash
-git checkout v1.0.0
+git checkout v1.3.2
 npm install
 npm run build
 ```
@@ -101,4 +101,4 @@ npm run build
 
 ---
 
-**Compare:** v1.0.0...v1.1.0
+**Compare:** v1.3.2...v1.3.3
