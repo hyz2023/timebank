@@ -12,6 +12,7 @@ import {
 import { TrendChart } from '../components/charts/TrendChart';
 import { TaskPieChart } from '../components/charts/TaskPieChart';
 import { HeatmapChart } from '../components/charts/HeatmapChart';
+import { TimeBarChart } from '../components/charts/TimeBarChart';
 
 export const Analytics = () => {
   const logs = useStore((state) => state.logs);
@@ -25,6 +26,8 @@ export const Analytics = () => {
   const [activeHeatmap, setActiveHeatmap] = useState('earn');
   const [taskDistribution, setTaskDistribution] = useState([]);
   const [healthScore, setHealthScore] = useState({ label: '-', color: 'gray', ratio: 0 });
+  const [redeemMinutes, setRedeemMinutes] = useState(0);
+  const [redeemTimeAnalysis, setRedeemTimeAnalysis] = useState(null);
 
   // 确保数据已加载
   useEffect(() => {
@@ -40,12 +43,15 @@ export const Analytics = () => {
     console.log('[Analytics] 开始计算数据', { logsLength: logs?.length, days });
     if (logs && logs.length > 0) {
       try {
-        setMetrics(calculateMetrics(logs, days));
+        const metricsData = calculateMetrics(logs, days);
+        setMetrics(metricsData);
+        setRedeemMinutes(metricsData.redeemMinutes?.value || 0);
         setTrendData(calculateDailyTrend(logs, days));
         setEarnHeatmapData(calculateHeatmapData(logs, days, 'EARN'));
         setRedeemHeatmapData(calculateHeatmapData(logs, days, 'REDEEM'));
         setTaskDistribution(calculateTaskDistribution(logs, days));
         setHealthScore(calculateHealthScore(logs, days));
+        setRedeemTimeAnalysis(calculateRedeemTimeAnalysis(logs, days));
         console.log('[Analytics] 数据计算完成');
       } catch (err) {
         console.error('[Analytics] 计算错误:', err);
@@ -164,7 +170,7 @@ export const Analytics = () => {
             </div>
           </div>
           <div className="bg-gray-800 rounded-lg p-3">
-            <div className="text-gray-400 text-xs mb-1">任务</div>
+            <div className="text-gray-400 text-xs mb-1">任务数</div>
             <div className="text-2xl font-bold text-white">{metrics.tasks.value}</div>
             <div className={`text-xs mt-1 ${getTrendColorClass(metrics.tasks.trend)}`}>
               {metrics.tasks.trend && (
@@ -174,23 +180,23 @@ export const Analytics = () => {
             </div>
           </div>
           <div className="bg-gray-800 rounded-lg p-3">
-            <div className="text-gray-400 text-xs mb-1">兑换</div>
+            <div className="text-gray-400 text-xs mb-1">总兑换时长</div>
+            <div className="text-2xl font-bold text-white">{redeemMinutes} <span className="text-sm text-gray-400">分钟</span></div>
+            <div className={`text-xs mt-1 ${getTrendColorClass(metrics.redeemMinutes?.trend)}`}>
+              {metrics.redeemMinutes?.trend && (
+                <>{getTrendIcon(metrics.redeemMinutes.trend)} {metrics.redeemMinutes.change}%</>
+              )}
+              {!metrics.redeemMinutes?.trend && <span className="text-gray-500">全部数据</span>}
+            </div>
+          </div>
+          <div className="bg-gray-800 rounded-lg p-3">
+            <div className="text-gray-400 text-xs mb-1">兑换次数</div>
             <div className="text-2xl font-bold text-white">{metrics.redeems.value}</div>
             <div className={`text-xs mt-1 ${getTrendColorClass(metrics.redeems.trend)}`}>
               {metrics.redeems.trend && (
                 <>{getTrendIcon(metrics.redeems.trend)} {metrics.redeems.change}%</>
               )}
               {!metrics.redeems.trend && <span className="text-gray-500">全部数据</span>}
-            </div>
-          </div>
-          <div className="bg-gray-800 rounded-lg p-3">
-            <div className="text-gray-400 text-xs mb-1">健康度</div>
-            <div className="text-2xl font-bold text-white flex items-center gap-1">
-              <span className={`inline-block w-2.5 h-2.5 rounded-full ${getHealthColorClass(healthScore.color)}`}></span>
-              {healthScore.label}
-            </div>
-            <div className="text-gray-400 text-xs mt-1">
-              {healthScore.ratio}% 21:00 前
             </div>
           </div>
         </div>
@@ -200,6 +206,9 @@ export const Analytics = () => {
       <div className="space-y-3">
         <TrendChart data={trendData} />
         <TaskPieChart data={taskDistribution} />
+        
+        {/* 健康度 - 兑换时间分布 */}
+        {redeemTimeAnalysis && <TimeBarChart data={redeemTimeAnalysis} />}
         
         {/* 热力图 - 左右并排 */}
         <div className="bg-gray-800 rounded-lg p-3">

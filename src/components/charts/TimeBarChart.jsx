@@ -9,10 +9,34 @@ export const TimeBarChart = ({ data }) => {
     { name: '21:00 后', value: data.after21, color: '#EF4444' }
   ];
 
+  // 计算 21:00 前兑换占比
+  const before21Count = data.before14 + data.before19 + data.before21;
+  const total = data.total || before21Count + data.after21;
+  const before21Ratio = total > 0 ? Math.round((before21Count / total) * 100) : 0;
+
+  // 定义健康状态
+  const getHealthStatus = (ratio) => {
+    if (ratio >= 80) return { label: '健康', color: 'text-emerald-400', bg: 'bg-emerald-500' };
+    if (ratio >= 60) return { label: '注意', color: 'text-amber-400', bg: 'bg-amber-500' };
+    return { label: '警示', color: 'text-red-400', bg: 'bg-red-500' };
+  };
+
+  const healthStatus = getHealthStatus(before21Ratio);
+
   return (
     <div className="bg-gray-800 rounded-lg p-4">
-      <h3 className="text-lg font-semibold text-white mb-4">⏰ 兑换时间分布</h3>
-      <ResponsiveContainer width="100%" height={300}>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-white">⏰ 兑换时间分布</h3>
+        <div className="flex items-center gap-2">
+          <div className="text-right">
+            <div className="text-xs text-gray-400">21:00 前占比</div>
+            <div className={`text-xl font-bold ${healthStatus.color}`}>
+              {before21Ratio}% <span className={`inline-block w-2.5 h-2.5 rounded-full ${healthStatus.bg} ml-1`}></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ResponsiveContainer width="100%" height={250}>
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
           <XAxis dataKey="name" stroke="#9CA3AF" tick={{ fontSize: 11 }} />

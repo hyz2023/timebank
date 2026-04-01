@@ -287,13 +287,17 @@ export const calculateMetrics = (logs, days) => {
   
   const currentTasks = currentLogs.filter(l => l.type === 'EARN').length;
   const currentRedeems = currentLogs.filter(l => l.type === 'REDEEM').length;
+  const currentRedeemMinutes = currentLogs
+    .filter(l => l.type === 'REDEEM' && l.minutes)
+    .reduce((sum, l) => sum + l.minutes, 0);
   
   // 全部数据模式：不计算对比
   if (days === null || days === undefined) {
     return {
       points: { value: currentPoints, change: '-', trend: null },
       tasks: { value: currentTasks, change: '-', trend: null },
-      redeems: { value: currentRedeems, change: '-', trend: null }
+      redeems: { value: currentRedeems, change: '-', trend: null },
+      redeemMinutes: { value: currentRedeemMinutes, change: '-', trend: null }
     };
   }
   
@@ -308,6 +312,9 @@ export const calculateMetrics = (logs, days) => {
   
   const prevTasks = prevLogs.filter(l => l.type === 'EARN').length;
   const prevRedeems = prevLogs.filter(l => l.type === 'REDEEM').length;
+  const prevRedeemMinutes = prevLogs
+    .filter(l => l.type === 'REDEEM' && l.minutes)
+    .reduce((sum, l) => sum + l.minutes, 0);
   
   const calcChange = (current, prev) => {
     if (prev === 0) return { change: 100, trend: 'up' };
@@ -330,6 +337,10 @@ export const calculateMetrics = (logs, days) => {
     redeems: {
       value: currentRedeems,
       ...calcChange(currentRedeems, prevRedeems)
+    },
+    redeemMinutes: {
+      value: currentRedeemMinutes,
+      ...calcChange(currentRedeemMinutes, prevRedeemMinutes)
     }
   };
 };
