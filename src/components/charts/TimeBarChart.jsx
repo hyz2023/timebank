@@ -24,9 +24,9 @@ export const TimeBarChart = ({ data }) => {
   const healthStatus = getHealthStatus(before21Ratio);
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white">⏰ 兑换时间分布</h3>
+    <div className="bg-gray-800 rounded-lg p-3">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-sm font-semibold text-white">⏰ 兑换时间分布</h3>
         <div className="flex items-center gap-2">
           <div className="text-right">
             <div className="text-xs text-gray-400">21:00 前占比</div>
