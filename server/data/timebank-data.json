@@ -1,5 +1,5 @@
 {
-  "balance": 37,
+  "balance": 7,
   "tasks": [
     {
       "id": "t1",
@@ -83,6 +83,19 @@
     }
   ],
   "logs": [
+    {
+      "id": "l_1775104960995",
+      "type": "REDEEM",
+      "taskId": null,
+      "taskName": "国际航线",
+      "pointsChange": -30,
+      "minutes": 49,
+      "baseMinutes": 45,
+      "timestamp": 1775104960995,
+      "meta": {
+        "tier": "premium"
+      }
+    },
     {
       "id": "l_1775103998715",
       "type": "EARN",
@@ -1910,6 +1923,13 @@
     }
   ],
   "timers": [
+    {
+      "id": "timer_1775104960995",
+      "minutes": 49,
+      "startTime": 1775104960995,
+      "endTime": 1775107900995,
+      "label": "国际航线"
+    },
     {
       "id": "timer_1775047740110",
       "minutes": 15,

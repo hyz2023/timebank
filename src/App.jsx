@@ -106,8 +106,8 @@ export default function App() {
                         <div className="flex items-baseline justify-center gap-1">
                             <span
                                 key={balance}
-                                className="comic-title text-5xl text-gold animate-count-up"
-                                style={{ textShadow: '0 0 20px rgba(255,213,79,0.4), 2px 2px 0 rgba(0,0,0,0.3)' }}
+                                className="text-5xl text-gold animate-count-up font-mono font-bold"
+                                style={{ textShadow: '0 0 20px rgba(255,213,79,0.4), 2px 2px 0 rgba(0,0,0,0.3)', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}
                             >
                                 {typeof balance === 'number' ? balance.toFixed(2) : balance}
                             </span>
