@@ -1,5 +1,5 @@
 {
-  "balance": 7.5,
+  "balance": 37,
   "tasks": [
     {
       "id": "t1",
@@ -7,7 +7,7 @@
       "basePoints": 3,
       "bonusPoints": 0,
       "dailyCount": 1,
-      "lastUpdate": "2026-04-01",
+      "lastUpdate": "2026-04-02",
       "icon": "🖊️",
       "desc": "55 字练字只能在周一到周五做"
     },
@@ -16,8 +16,8 @@
       "name": "单词",
       "basePoints": 6,
       "bonusPoints": 0,
-      "dailyCount": 2,
-      "lastUpdate": "2026-04-01",
+      "dailyCount": 1,
+      "lastUpdate": "2026-04-02",
       "icon": "📖",
       "desc": "百词斩打卡"
     },
@@ -26,8 +26,8 @@
       "name": "口算",
       "basePoints": 4,
       "bonusPoints": 2,
-      "dailyCount": 2,
-      "lastUpdate": "2026-04-01",
+      "dailyCount": 0,
+      "lastUpdate": "2026-04-02",
       "icon": "🔢",
       "desc": "计算小超市 1 页"
     },
@@ -36,8 +36,8 @@
       "name": "数学题",
       "basePoints": 4,
       "bonusPoints": 2,
-      "dailyCount": 2,
-      "lastUpdate": "2026-04-01",
+      "dailyCount": 3,
+      "lastUpdate": "2026-04-02",
       "icon": "📐",
       "desc": "164 练习题"
     },
@@ -47,7 +47,7 @@
       "basePoints": 12,
       "bonusPoints": 0,
       "dailyCount": 0,
-      "lastUpdate": "2026-04-01",
+      "lastUpdate": "2026-04-02",
       "icon": "📺",
       "desc": "满分英语 1 视频 + 练习题"
     },
@@ -57,7 +57,7 @@
       "basePoints": 10,
       "bonusPoints": 1,
       "dailyCount": 0,
-      "lastUpdate": "2026-04-01",
+      "lastUpdate": "2026-04-02",
       "icon": "🐅",
       "desc": "写一页书法只能在休息日做"
     },
@@ -66,8 +66,8 @@
       "name": "英语单词复习 50词",
       "basePoints": 4,
       "bonusPoints": 0,
-      "dailyCount": 2,
-      "lastUpdate": "2026-04-01",
+      "dailyCount": 1,
+      "lastUpdate": "2026-04-02",
       "icon": "🏰",
       "desc": "百词斩填词 50词"
     },
@@ -77,12 +77,90 @@
       "basePoints": 8,
       "bonusPoints": 4,
       "dailyCount": 0,
-      "lastUpdate": "2026-04-01",
+      "lastUpdate": "2026-04-02",
       "icon": "📝",
       "desc": "语文练习卷 1/4 页"
     }
   ],
   "logs": [
+    {
+      "id": "l_1775103998715",
+      "type": "EARN",
+      "taskId": "t4",
+      "taskName": "数学题",
+      "pointsChange": 4.5,
+      "timestamp": 1775103998715,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 0.75,
+        "dailyCount": 3
+      }
+    },
+    {
+      "id": "l_1775103996508",
+      "type": "EARN",
+      "taskId": "t4",
+      "taskName": "数学题",
+      "pointsChange": 6,
+      "timestamp": 1775103996508,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 2
+      }
+    },
+    {
+      "id": "l_1775103994361",
+      "type": "EARN",
+      "taskId": "t4",
+      "taskName": "数学题",
+      "pointsChange": 6,
+      "timestamp": 1775103994361,
+      "meta": {
+        "quality": "perfect",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1775103719715",
+      "type": "EARN",
+      "taskId": "t1",
+      "taskName": "练字",
+      "pointsChange": 3,
+      "timestamp": 1775103719715,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1775103712700",
+      "type": "EARN",
+      "taskId": "t7",
+      "taskName": "英语单词复习 50词",
+      "pointsChange": 4,
+      "timestamp": 1775103712700,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
+    {
+      "id": "l_1775103709118",
+      "type": "EARN",
+      "taskId": "t2",
+      "taskName": "单词",
+      "pointsChange": 6,
+      "timestamp": 1775103709118,
+      "meta": {
+        "quality": "normal",
+        "decayRate": 1,
+        "dailyCount": 1
+      }
+    },
     {
       "id": "l_1775050462312",
       "type": "EARN",

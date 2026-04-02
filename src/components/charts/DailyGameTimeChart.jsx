@@ -32,7 +32,7 @@ export const DailyGameTimeChart = ({ data }) => {
   return (
     <div className="bg-gray-800 rounded-lg p-3">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold text-white">🎮 每日游戏时间</h3>
+        <h3 className="text-sm font-semibold text-white">⏱️ 每日兑换时长</h3>
         <div className="flex gap-4 text-xs">
           <div className="text-right">
             <div className="text-gray-400">总计</div>

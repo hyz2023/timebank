@@ -209,8 +209,8 @@ export const Analytics = () => {
       {/* 图表区域 - 完整布局 */}
       <div className="space-y-3">
         <TrendChart data={trendData} />
-        <DailyGameTimeChart data={dailyGameTime} />
         <TaskPieChart data={taskDistribution} />
+        <DailyGameTimeChart data={dailyGameTime} />
         
         {/* 健康度 - 兑换时间分布 */}
         {redeemTimeAnalysis && <TimeBarChart data={redeemTimeAnalysis} />}
