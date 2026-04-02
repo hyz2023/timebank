@@ -7,12 +7,14 @@ import {
   calculateHeatmapData,
   calculateTaskDistribution,
   calculateRedeemTimeAnalysis,
-  calculateHealthScore
+  calculateHealthScore,
+  calculateDailyGameTime
 } from '../utils/analytics';
 import { TrendChart } from '../components/charts/TrendChart';
 import { TaskPieChart } from '../components/charts/TaskPieChart';
 import { HeatmapChart } from '../components/charts/HeatmapChart';
 import { TimeBarChart } from '../components/charts/TimeBarChart';
+import { DailyGameTimeChart } from '../components/charts/DailyGameTimeChart';
 
 export const Analytics = () => {
   const logs = useStore((state) => state.logs);
@@ -28,6 +30,7 @@ export const Analytics = () => {
   const [healthScore, setHealthScore] = useState({ label: '-', color: 'gray', ratio: 0 });
   const [redeemMinutes, setRedeemMinutes] = useState(0);
   const [redeemTimeAnalysis, setRedeemTimeAnalysis] = useState(null);
+  const [dailyGameTime, setDailyGameTime] = useState([]);
 
   // 确保数据已加载
   useEffect(() => {
@@ -52,6 +55,7 @@ export const Analytics = () => {
         setTaskDistribution(calculateTaskDistribution(logs, days));
         setHealthScore(calculateHealthScore(logs, days));
         setRedeemTimeAnalysis(calculateRedeemTimeAnalysis(logs, days));
+        setDailyGameTime(calculateDailyGameTime(logs, days));
         console.log('[Analytics] 数据计算完成');
       } catch (err) {
         console.error('[Analytics] 计算错误:', err);
@@ -205,6 +209,7 @@ export const Analytics = () => {
       {/* 图表区域 - 完整布局 */}
       <div className="space-y-3">
         <TrendChart data={trendData} />
+        <DailyGameTimeChart data={dailyGameTime} />
         <TaskPieChart data={taskDistribution} />
         
         {/* 健康度 - 兑换时间分布 */}

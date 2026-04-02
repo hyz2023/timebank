@@ -274,6 +274,87 @@ export const calculateHealthScore = (logs, days) => {
 };
 
 /**
+ * 计算每日游戏时间（按兑换记录统计）
+ */
+export const calculateDailyGameTime = (logs, days) => {
+  const { start, end } = getDateRange(days);
+  const filteredLogs = filterLogsByDateRange(logs, start, end);
+  
+  // 获取日期范围的所有日期
+  const dailyData = {};
+  const dateKeys = [];
+  
+  if (days === null || days === undefined) {
+    // 全部数据：从第一条兑换记录开始到今日
+    const redeemLogs = filteredLogs.filter(l => l.type === 'REDEEM');
+    if (redeemLogs.length === 0) return [];
+    
+    const timestamps = redeemLogs.map(l => l.timestamp);
+    const minTimestamp = Math.min(...timestamps);
+    const maxTimestamp = Math.max(...timestamps);
+    
+    const startDate = new Date(minTimestamp);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(maxTimestamp);
+    endDate.setHours(23, 59, 59, 999);
+    
+    // 生成从起始日期到结束日期的所有日期
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      const dateStr = formatDate(d.getTime());
+      dailyData[dateStr] = { date: dateStr, minutes: 0 };
+      dateKeys.push(dateStr);
+    }
+  } else {
+    // 固定天数模式
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      date.setHours(0, 0, 0, 0);
+      const dateStr = formatDate(date.getTime());
+      dailyData[dateStr] = { date: dateStr, minutes: 0 };
+      dateKeys.push(dateStr);
+    }
+  }
+  
+  // 聚合兑换记录的游戏时间
+  filteredLogs
+    .filter(l => l.type === 'REDEEM' && l.minutes)
+    .forEach(log => {
+      const dateStr = formatDate(log.timestamp);
+      if (dailyData[dateStr]) {
+        dailyData[dateStr].minutes += log.minutes;
+      }
+    });
+  
+  // 只在"全部数据"模式下裁剪两端空数据
+  if (days === null || days === undefined) {
+    let startIndex = 0;
+    let endIndex = dateKeys.length - 1;
+    
+    // 找到第一个有数据的日期
+    for (let i = 0; i < dateKeys.length; i++) {
+      if (dailyData[dateKeys[i]].minutes > 0) {
+        startIndex = i;
+        break;
+      }
+    }
+    
+    // 找到最后一个有数据的日期
+    for (let i = dateKeys.length - 1; i >= 0; i--) {
+      if (dailyData[dateKeys[i]].minutes > 0) {
+        endIndex = i;
+        break;
+      }
+    }
+    
+    return dateKeys.slice(startIndex, endIndex + 1).map(key => dailyData[key]);
+  }
+  
+  // 固定天数模式：返回完整日期范围（包括 0 值日期）
+  return dateKeys.map(key => dailyData[key]);
+};
+
+/**
  * 计算核心指标
  */
 export const calculateMetrics = (logs, days) => {
