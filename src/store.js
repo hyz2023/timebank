@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { calculatePoints, getDecayRate, getTodayStr, DEFAULT_TASKS } from './engine';
 
-const API_BASE = 'http://192.168.2.105:3001/api';
+const API_BASE = 'http://192.168.2.105:5174/api';
 
 // API 调用函数
 const api = {
