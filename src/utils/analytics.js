@@ -25,13 +25,26 @@ export const getTimePeriod = (timestamp) => {
 
 /**
  * 获取日期范围的时间戳（本地时区）
+ * @param {number|null} days - 天数，或 null（全部数据）
+ * @param {Object} customRange - { startDate: 'YYYY-MM-DD', endDate: 'YYYY-MM-DD' }
  */
-export const getDateRange = (days) => {
+export const getDateRange = (days, customRange = null) => {
   const now = new Date();
   
   // 获取本地日期的起始和结束
   const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
   const start = new Date();
+  
+  // 自定义日期区间模式
+  if (customRange && customRange.startDate && customRange.endDate) {
+    const s = customRange.startDate.split('-');
+    const e = customRange.endDate.split('-');
+    start.setFullYear(+s[0], +s[1]-1, +s[2]);
+    start.setHours(0, 0, 0, 0);
+    end.setFullYear(+e[0], +e[1]-1, +e[2]);
+    end.setHours(23, 59, 59, 999);
+    return { start: start.getTime(), end: end.getTime(), custom: true };
+  }
   
   if (days === null || days === undefined) {
     // 全部数据：返回一个很早的日期
@@ -80,8 +93,8 @@ export const filterLogsByDateRange = (logs, startTimestamp, endTimestamp) => {
 /**
  * 计算每日趋势数据
  */
-export const calculateDailyTrend = (logs, days) => {
-  const { start, end } = getDateRange(days);
+export const calculateDailyTrend = (logs, days, customRange = null) => {
+  const { start, end, custom } = getDateRange(days, customRange);
   const filteredLogs = filterLogsByDateRange(logs, start, end);
   
   if (filteredLogs.length === 0) return [];
@@ -131,8 +144,8 @@ export const calculateDailyTrend = (logs, days) => {
     }
   });
   
-  // 只在"全部数据"模式下裁剪两端空数据，固定天数模式保持完整
-  if (days === null || days === undefined) {
+  // 在"全部数据"或自定义模式下裁剪两端空数据，固定天数模式保持完整
+  if (days === null || days === undefined || custom) {
     let startIndex = 0;
     let endIndex = dateKeys.length - 1;
     
@@ -162,8 +175,8 @@ export const calculateDailyTrend = (logs, days) => {
 /**
  * 计算热力图数据（按小时和星期几）
  */
-export const calculateHeatmapData = (logs, days, type = null) => {
-  const { start, end } = getDateRange(days);
+export const calculateHeatmapData = (logs, days, type = null, customRange = null) => {
+  const { start, end } = getDateRange(days, customRange);
   let filteredLogs = filterLogsByDateRange(logs, start, end);
   
   // 如果指定了类型，过滤 EARN 或 REDEEM
@@ -197,8 +210,8 @@ export const calculateHeatmapData = (logs, days, type = null) => {
 /**
  * 计算任务分布数据（按任务次数统计）
  */
-export const calculateTaskDistribution = (logs, days) => {
-  const { start, end } = getDateRange(days);
+export const calculateTaskDistribution = (logs, days, customRange = null) => {
+  const { start, end } = getDateRange(days, customRange);
   const filteredLogs = filterLogsByDateRange(logs, start, end);
   
   // 按任务分组（统计次数）
@@ -228,8 +241,8 @@ export const calculateTaskDistribution = (logs, days) => {
 /**
  * 计算兑换时间分析数据（14:00、19:00、21:00 分割点）
  */
-export const calculateRedeemTimeAnalysis = (logs, days) => {
-  const { start, end } = getDateRange(days);
+export const calculateRedeemTimeAnalysis = (logs, days, customRange = null) => {
+  const { start, end } = getDateRange(days, customRange);
   const filteredLogs = filterLogsByDateRange(logs, start, end);
   
   const analysis = {
@@ -257,8 +270,8 @@ export const calculateRedeemTimeAnalysis = (logs, days) => {
 /**
  * 计算健康度评分（21:00 前后作为划分）
  */
-export const calculateHealthScore = (logs, days) => {
-  const { start, end } = getDateRange(days);
+export const calculateHealthScore = (logs, days, customRange = null) => {
+  const { start, end } = getDateRange(days, customRange);
   const filteredLogs = filterLogsByDateRange(logs, start, end);
   
   if (filteredLogs.length === 0) {
@@ -276,8 +289,8 @@ export const calculateHealthScore = (logs, days) => {
 /**
  * 计算每日游戏时间（按兑换记录统计）
  */
-export const calculateDailyGameTime = (logs, days) => {
-  const { start, end } = getDateRange(days);
+export const calculateDailyGameTime = (logs, days, customRange = null) => {
+  const { start, end, custom } = getDateRange(days, customRange);
   const filteredLogs = filterLogsByDateRange(logs, start, end);
   
   // 获取日期范围的所有日期
@@ -326,8 +339,8 @@ export const calculateDailyGameTime = (logs, days) => {
       }
     });
   
-  // 只在"全部数据"模式下裁剪两端空数据
-  if (days === null || days === undefined) {
+  // 在"全部数据"或自定义模式下裁剪两端空数据，固定天数模式保持完整
+  if (days === null || days === undefined || custom) {
     let startIndex = 0;
     let endIndex = dateKeys.length - 1;
     
@@ -357,8 +370,8 @@ export const calculateDailyGameTime = (logs, days) => {
 /**
  * 计算核心指标
  */
-export const calculateMetrics = (logs, days) => {
-  const { start, end } = getDateRange(days);
+export const calculateMetrics = (logs, days, customRange = null) => {
+  const { start, end, custom } = getDateRange(days, customRange);
   const currentLogs = filterLogsByDateRange(logs, start, end);
   
   // 当前周期数据
@@ -372,8 +385,8 @@ export const calculateMetrics = (logs, days) => {
     .filter(l => l.type === 'REDEEM' && l.minutes)
     .reduce((sum, l) => sum + l.minutes, 0);
   
-  // 全部数据模式：不计算对比
-  if (days === null || days === undefined) {
+  // 全部数据或自定义模式：不计算对比
+  if (days === null || days === undefined || custom) {
     return {
       points: { value: currentPoints, change: '-', trend: null },
       tasks: { value: currentTasks, change: '-', trend: null },

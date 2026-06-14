@@ -1,6 +1,25 @@
 // TimeBank 核心积分计算引擎
 
 /**
+ * 任务分类配置
+ */
+export const CATEGORIES = {
+    english: { label: '英语', icon: '🔤', order: 1 },
+    math:    { label: '数学', icon: '🔢', order: 2 },
+    chinese: { label: '语文', icon: '📝', order: 3 },
+    other:   { label: '其他', icon: '📌', order: 4 },
+};
+
+/**
+ * 排序模式
+ */
+export const SORT_MODES = {
+    category: { label: '分类', icon: '📋' },
+    points:   { label: '积分', icon: '💎' },
+    frequency:{ label: '频率', icon: '🔥' },
+};
+
+/**
  * 计算本次任务得分（含衰减和质量奖励）
  * 衰减规则：
  *   第 1-2 次/天：100% 收益
@@ -113,6 +132,11 @@ export const isHoliday = (date = new Date()) => {
  * 工作日 60 分钟，法定节假日 90 分钟
  */
 export const getDailyLimit = () => {
+    // 使用北京时间（UTC+8）取日期
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    // 临时特例：2026-05-27 限额 150 分钟（仅今天）
+    if (today === '2026-05-27') return 150;
     return isHoliday() ? 90 : 60;
 };
 
@@ -159,12 +183,12 @@ export const getTodayStr = () => {
  * 默认任务配置
  */
 export const DEFAULT_TASKS = [
-    { id: 't1', name: '练字', basePoints: 3, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🖊️', desc: '55 字练字只能在周一到周五做' },
-    { id: 't2', name: '单词', basePoints: 6, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📖', desc: '百词斩打卡' },
-    { id: 't3', name: '口算', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🔢', desc: '计算小超市 1 页' },
-    { id: 't4', name: '数学题', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📐', desc: '164 练习题' },
-    { id: 't5', name: '英语学习', basePoints: 12, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📺', desc: '满分英语 1 视频 + 练习题' },
-    { id: 't6', name: '练字一页（仅周末）', basePoints: 10, bonusPoints: 1, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🐅', desc: '写一页书法只能在休息日做' },
-    { id: 't7', name: '英语单词复习 80 词', basePoints: 4, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🏰', desc: '百词斩填词 80 词' },
-    { id: 't8', name: '语文练习卷 1/4 页', basePoints: 8, bonusPoints: 4, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📝', desc: '语文练习卷 1/4 页' },
+    { id: 't1', name: '练字', basePoints: 3, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🖊️', desc: '55 字练字只能在周一到周五做', category: 'chinese' },
+    { id: 't2', name: '单词', basePoints: 6, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📖', desc: '百词斩打卡', category: 'english' },
+    { id: 't3', name: '口算', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🔢', desc: '计算小超市 1 页', category: 'math' },
+    { id: 't4', name: '数学题', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📐', desc: '164 练习题', category: 'math' },
+    { id: 't5', name: '英语学习', basePoints: 12, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📺', desc: '满分英语 1 视频 + 练习题', category: 'english' },
+    { id: 't6', name: '练字一页（仅周末）', basePoints: 10, bonusPoints: 1, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🐅', desc: '写一页书法只能在休息日做', category: 'chinese' },
+    { id: 't7', name: '英语单词复习 80 词', basePoints: 4, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🏰', desc: '百词斩填词 80 词', category: 'english' },
+    { id: 't8', name: '语文练习卷 1/4 页', basePoints: 8, bonusPoints: 4, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📝', desc: '语文练习卷 1/4 页', category: 'chinese' },
 ];

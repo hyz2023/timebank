@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import useStore from '../store';
+import { CATEGORIES } from '../engine';
 
 export default function AdminPanel({ onClose }) {
     const tasks = useStore((s) => s.tasks);
@@ -19,11 +20,13 @@ export default function AdminPanel({ onClose }) {
     const [newTaskBonus, setNewTaskBonus] = useState('2');
     const [newTaskIcon, setNewTaskIcon] = useState('📝');
     const [newTaskDesc, setNewTaskDesc] = useState('');
+    const [newTaskCategory, setNewTaskCategory] = useState('other');
     const [importMsg, setImportMsg] = useState('');
     const [editingDesc, setEditingDesc] = useState({}); // 本地编辑状态
     const [editingPoints, setEditingPoints] = useState({}); // 本地积分编辑状态
     const [editingName, setEditingName] = useState({}); // 本地任务名编辑状态
     const [editingIcon, setEditingIcon] = useState({}); // 本地图标编辑状态
+    const [editingCategory, setEditingCategory] = useState({}); // 本地分类编辑状态
     const fileInputRef = useRef(null);
 
     const handleExport = () => {
@@ -57,12 +60,14 @@ export default function AdminPanel({ onClose }) {
             bonusPoints: parseInt(newTaskBonus) || 2,
             icon: newTaskIcon || '📝',
             desc: newTaskDesc || newTaskName.trim(),
+            category: newTaskCategory || 'other',
         });
         setNewTaskName('');
         setNewTaskBase('4');
         setNewTaskBonus('2');
         setNewTaskIcon('📝');
         setNewTaskDesc('');
+        setNewTaskCategory('other');
     };
 
     // 描述输入框失去焦点时保存
@@ -98,6 +103,19 @@ export default function AdminPanel({ onClose }) {
             updateTask(taskId, { icon: value });
         }
         setEditingIcon(prev => {
+            const next = { ...prev };
+            delete next[taskId];
+            return next;
+        });
+    };
+
+    // 分类选择时保存
+    const handleCategoryChange = (taskId, value) => {
+        const task = tasks.find(t => t.id === taskId);
+        if (task && value !== task.category) {
+            updateTask(taskId, { category: value });
+        }
+        setEditingCategory(prev => {
             const next = { ...prev };
             delete next[taskId];
             return next;
@@ -228,6 +246,26 @@ export default function AdminPanel({ onClose }) {
                                         </div>
 
                                         <div>
+                                            <label className="text-xs text-cloud-dark block mb-1">分类</label>
+                                            <div className="flex gap-1.5">
+                                                {Object.entries(CATEGORIES).map(([key, cat]) => (
+                                                    <button
+                                                        key={key}
+                                                        className={`flex-1 text-xs py-2 rounded-lg font-bold transition-all ${
+                                                            (editingCategory.hasOwnProperty(task.id) ? editingCategory[task.id] : task.category) === key
+                                                                ? 'bg-sky/20 text-sky border border-sky/30'
+                                                                : 'bg-navy-dark text-cloud-dark border border-transparent'
+                                                        }`}
+                                                        onClick={() => setEditingCategory(prev => ({ ...prev, [task.id]: key }))}
+                                                        onBlur={() => handleCategoryChange(task.id, editingCategory[task.id] ?? task.category)}
+                                                    >
+                                                        {cat.icon} {cat.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
                                             <label className="text-xs text-cloud-dark block mb-1">描述</label>
                                             <div className="flex gap-2">
                                                 <input
@@ -283,7 +321,7 @@ export default function AdminPanel({ onClose }) {
                                             添加
                                         </button>
                                     </div>
-                                    <div>
+                                    <div className="mb-3">
                                         <input
                                             type="text"
                                             placeholder="任务描述（可选）"
@@ -291,6 +329,24 @@ export default function AdminPanel({ onClose }) {
                                             value={newTaskDesc || ''}
                                             onChange={(e) => setNewTaskDesc(e.target.value)}
                                         />
+                                    </div>
+                                    <div>
+                                        <label className="text-xs text-cloud-dark block mb-1">分类</label>
+                                        <div className="flex gap-1.5">
+                                            {Object.entries(CATEGORIES).map(([key, cat]) => (
+                                                <button
+                                                    key={key}
+                                                    className={`flex-1 text-xs py-2 rounded-lg font-bold transition-all ${
+                                                        newTaskCategory === key
+                                                            ? 'bg-sky/20 text-sky border border-sky/30'
+                                                            : 'bg-navy-dark text-cloud-dark border border-transparent'
+                                                    }`}
+                                                    onClick={() => setNewTaskCategory(key)}
+                                                >
+                                                    {cat.icon} {cat.label}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

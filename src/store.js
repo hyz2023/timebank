@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { calculatePoints, getDecayRate, getTodayStr, DEFAULT_TASKS } from './engine';
+import { calculatePoints, getDecayRate, getTodayStr, DEFAULT_TASKS, CATEGORIES, SORT_MODES } from './engine';
 
 const API_BASE = '/api';
 
@@ -75,6 +75,15 @@ const api = {
     },
 };
 
+// 获取排序模式（从 localStorage 读取默认值）
+const getInitialSortMode = () => {
+    try {
+        const saved = localStorage.getItem('timebank-sortMode');
+        if (saved && SORT_MODES[saved]) return saved;
+    } catch {}
+    return 'category'; // 默认按分类排序
+};
+
 const useStore = create((set, get) => ({
     // === 用户数据 ===
     balance: 0,
@@ -83,6 +92,41 @@ const useStore = create((set, get) => ({
     timers: [],
     loading: true,
     error: null,
+
+    // === 排序状态 ===
+    sortMode: getInitialSortMode(),
+
+    // === 设置排序模式 ===
+    setSortMode: (mode) => {
+        if (!SORT_MODES[mode]) return;
+        localStorage.setItem('timebank-sortMode', mode);
+        set({ sortMode: mode });
+    },
+
+    // === 获取排序后的任务列表 ===
+    getSortedTasks: () => {
+        const state = get();
+        const tasks = [...state.tasks];
+        const mode = state.sortMode;
+
+        if (mode === 'category') {
+            // 按分类分组，组内按基础分降序
+            tasks.sort((a, b) => {
+                const catA = CATEGORIES[a.category]?.order ?? 99;
+                const catB = CATEGORIES[b.category]?.order ?? 99;
+                if (catA !== catB) return catA - catB;
+                return b.basePoints - a.basePoints;
+            });
+        } else if (mode === 'points') {
+            // 按基础分降序
+            tasks.sort((a, b) => b.basePoints - a.basePoints);
+        } else if (mode === 'frequency') {
+            // 按今日完成次数降序
+            tasks.sort((a, b) => b.dailyCount - a.dailyCount);
+        }
+
+        return tasks;
+    },
 
     // === 初始化：从服务端加载数据 ===
     loadData: async () => {

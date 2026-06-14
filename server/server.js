@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3001;
+const PORT = 5174;
 const DATA_FILE = path.join(__dirname, 'data', 'timebank-data.json');
 
 // 中间件
@@ -26,17 +26,43 @@ if (!fs.existsSync(path.join(__dirname, 'data'))) {
 }
 
 // 初始化数据文件
+// 分类配置
+const CATEGORIES = {
+    english: { label: '英语', icon: '🔤', order: 1 },
+    math:    { label: '数学', icon: '🔢', order: 2 },
+    chinese: { label: '语文', icon: '📝', order: 3 },
+    other:   { label: '其他', icon: '📌', order: 4 },
+};
+
+// 任务名 → 默认分类映射（用于数据迁移）
+const TASK_CATEGORY_MAP = {
+    '练字': 'chinese',
+    '单词': 'english',
+    '口算': 'math',
+    '计算': 'math',
+    '数学题': 'math',
+    '英语学习': 'english',
+    '练字一页': 'chinese',
+    '练字一页（仅周末）': 'chinese',
+    '英语单词复习 80 词': 'english',
+    '英语单词复习 80词': 'english',
+    '语文练习卷 1/4 页': 'chinese',
+    '语文练习卷 1面': 'chinese',
+    '时文阅读': 'english',
+    '天省卷子': 'other',
+};
+
 const getDefaultData = () => ({
     balance: 0,
     tasks: [
-        { id: 't1', name: '练字', basePoints: 3, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🖊️', desc: '55 字练字只能在周一到周五做' },
-        { id: 't2', name: '单词', basePoints: 6, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📖', desc: '百词斩打卡' },
-        { id: 't3', name: '口算', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🔢', desc: '计算小超市 1 页' },
-        { id: 't4', name: '数学题', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📐', desc: '164 练习题' },
-        { id: 't5', name: '英语学习', basePoints: 12, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📺', desc: '满分英语 1 视频 + 练习题' },
-        { id: 't6', name: '练字一页（仅周末）', basePoints: 10, bonusPoints: 1, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🐅', desc: '写一页书法只能在休息日做' },
-        { id: 't7', name: '英语单词复习 80 词', basePoints: 4, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🏰', desc: '百词斩填词 80 词' },
-        { id: 't8', name: '语文练习卷 1/4 页', basePoints: 8, bonusPoints: 4, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📝', desc: '语文练习卷 1/4 页' },
+        { id: 't1', name: '练字', basePoints: 3, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🖊️', desc: '55 字练字只能在周一到周五做', category: 'chinese' },
+        { id: 't2', name: '单词', basePoints: 6, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📖', desc: '百词斩打卡', category: 'english' },
+        { id: 't3', name: '口算', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🔢', desc: '计算小超市 1 页', category: 'math' },
+        { id: 't4', name: '数学题', basePoints: 4, bonusPoints: 2, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📐', desc: '164 练习题', category: 'math' },
+        { id: 't5', name: '英语学习', basePoints: 12, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📺', desc: '满分英语 1 视频 + 练习题', category: 'english' },
+        { id: 't6', name: '练字一页（仅周末）', basePoints: 10, bonusPoints: 1, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🐅', desc: '写一页书法只能在休息日做', category: 'chinese' },
+        { id: 't7', name: '英语单词复习 80 词', basePoints: 4, bonusPoints: 0, dailyCount: 0, lastUpdate: getTodayStr(), icon: '🏰', desc: '百词斩填词 80 词', category: 'english' },
+        { id: 't8', name: '语文练习卷 1/4 页', basePoints: 8, bonusPoints: 4, dailyCount: 0, lastUpdate: getTodayStr(), icon: '📝', desc: '语文练习卷 1/4 页', category: 'chinese' },
     ],
     logs: [],
     config: {
@@ -66,6 +92,30 @@ const readData = () => {
     } catch (error) {
         console.error('读取数据失败:', error);
         data = getDefaultData();
+    }
+
+    // 防御性检查：确保关键字段存在
+    if (!Array.isArray(data.tasks)) {
+        console.warn('[TimeBank] 数据格式异常：tasks 不是数组，使用默认值');
+        data.tasks = getDefaultData().tasks;
+    }
+    if (!Array.isArray(data.logs)) {
+        data.logs = [];
+    }
+
+    // 数据迁移：为已有任务补充 category 字段
+    let needsMigration = false;
+    data.tasks = data.tasks.map((task) => {
+        if (!task.category) {
+            needsMigration = true;
+            const cat = TASK_CATEGORY_MAP[task.name] || 'other';
+            return { ...task, category: cat };
+        }
+        return task;
+    });
+    if (needsMigration) {
+        console.log('[TimeBank] 🔄 已为任务补充分类字段');
+        saveData(data);
     }
 
     // 每日重置检查
@@ -265,7 +315,7 @@ app.put('/api/tasks/:taskId', (req, res) => {
 
 // 添加任务
 app.post('/api/tasks', (req, res) => {
-    const { name, basePoints, bonusPoints, icon, desc } = req.body;
+    const { name, basePoints, bonusPoints, icon, desc, category } = req.body;
     const data = readData();
     
     const newTask = {
@@ -275,6 +325,7 @@ app.post('/api/tasks', (req, res) => {
         bonusPoints: parseInt(bonusPoints) || 2,
         icon: icon || '📝',
         desc: desc || name.trim(),
+        category: category || 'other',
         dailyCount: 0,
         lastUpdate: getTodayStr(),
     };
