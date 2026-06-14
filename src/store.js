@@ -1,86 +1,76 @@
 import { create } from 'zustand';
 import { calculatePoints, getDecayRate, getTodayStr, DEFAULT_TASKS } from './engine';
 
-const API_BASE = 'http://192.168.2.105:3001/api';
+const API_BASE = '/api';
 
-// API 调用函数
+// 统一 fetch：携带 Cookie；遇 401 跳回登录页
+const request = async (path, options = {}) => {
+    const res = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    });
+    if (res.status === 401) {
+        // 会话失效：刷新页面，AuthGate 会重新要求登录
+        window.location.reload();
+        throw new Error('未授权');
+    }
+    return res;
+};
+
 const api = {
     getData: async () => {
-        const res = await fetch(`${API_BASE}/data`);
+        const res = await request('/data');
         return await res.json();
     },
-    
+
     saveData: async (data) => {
-        const res = await fetch(`${API_BASE}/data`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
+        const res = await request('/data', { method: 'POST', body: JSON.stringify(data) });
         return await res.json();
     },
-    
+
     earnPoints: async (taskId, isPerfect) => {
-        const res = await fetch(`${API_BASE}/earn`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ taskId, isPerfect }),
-        });
+        const res = await request('/earn', { method: 'POST', body: JSON.stringify({ taskId, isPerfect }) });
         return await res.json();
     },
-    
+
     redeemPoints: async (tier) => {
-        const res = await fetch(`${API_BASE}/redeem`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tier }),
-        });
+        const res = await request('/redeem', { method: 'POST', body: JSON.stringify({ tier }) });
         return await res.json();
     },
-    
+
     clearExpiredTimers: async () => {
-        const res = await fetch(`${API_BASE}/timers/clear`, { method: 'POST' });
+        const res = await request('/timers/clear', { method: 'POST' });
         return await res.json();
     },
-    
+
     pauseTimer: async (timerId) => {
-        const res = await fetch(`${API_BASE}/timers/${timerId}/pause`, { method: 'POST' });
+        const res = await request(`/timers/${timerId}`, { method: 'POST', body: JSON.stringify({ action: 'pause' }) });
         return await res.json();
     },
-    
+
     resumeTimer: async (timerId) => {
-        const res = await fetch(`${API_BASE}/timers/${timerId}/resume`, { method: 'POST' });
+        const res = await request(`/timers/${timerId}`, { method: 'POST', body: JSON.stringify({ action: 'resume' }) });
         return await res.json();
     },
-    
+
     updateTask: async (taskId, updates) => {
-        const res = await fetch(`${API_BASE}/tasks/${taskId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updates),
-        });
+        const res = await request(`/tasks/${taskId}`, { method: 'PUT', body: JSON.stringify(updates) });
         return await res.json();
     },
-    
+
     addTask: async (task) => {
-        const res = await fetch(`${API_BASE}/tasks`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(task),
-        });
+        const res = await request('/tasks', { method: 'POST', body: JSON.stringify(task) });
         return await res.json();
     },
-    
+
     removeTask: async (taskId) => {
-        const res = await fetch(`${API_BASE}/tasks/${taskId}`, { method: 'DELETE' });
+        const res = await request(`/tasks/${taskId}`, { method: 'DELETE' });
         return await res.json();
     },
-    
+
     adjustBalance: async (amount) => {
-        const res = await fetch(`${API_BASE}/balance/adjust`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount }),
-        });
+        const res = await request('/balance', { method: 'POST', body: JSON.stringify({ amount }) });
         return await res.json();
     },
 };
