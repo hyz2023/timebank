@@ -2,11 +2,12 @@ import crypto from 'node:crypto'
 import { signSession, buildSessionCookie, SESSION_TTL_MS } from '../lib/auth.js'
 import { checkLoginRate, recordLoginFail, resetLoginRate } from '../lib/ratelimit.js'
 
+// 常量时间比较：先各自 HMAC 成定长摘要，避免通过长度差异泄露密码长度
 function safeEqual(a, b) {
-  const ab = Buffer.from(String(a))
-  const bb = Buffer.from(String(b))
-  if (ab.length !== bb.length) return false
-  return crypto.timingSafeEqual(ab, bb)
+  const key = Buffer.alloc(32)
+  const ha = crypto.createHmac('sha256', key).update(String(a)).digest()
+  const hb = crypto.createHmac('sha256', key).update(String(b)).digest()
+  return crypto.timingSafeEqual(ha, hb)
 }
 const delay = (ms) => new Promise((r) => setTimeout(r, ms))
 
