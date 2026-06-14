@@ -90,6 +90,7 @@ const useStore = create((set, get) => ({
     tasks: DEFAULT_TASKS,
     logs: [],
     timers: [],
+    config: { dailyExchangeLimitWeekday: 60, dailyExchangeLimitHoliday: 90, notifyOnExpire: true },
     loading: true,
     error: null,
 
@@ -138,6 +139,7 @@ const useStore = create((set, get) => ({
                 tasks: data.tasks || DEFAULT_TASKS,
                 logs: data.logs || [],
                 timers: data.timers || [],
+                config: data.config || get().config,
                 loading: false,
             });
             console.log('[TimeBank] ✅ 数据加载成功');
