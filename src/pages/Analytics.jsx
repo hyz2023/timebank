@@ -10,6 +10,7 @@ import {
   calculateHealthScore,
   calculateDailyGameTime
 } from '../utils/analytics';
+import { getTodayStr } from '../engine';
 import { TrendChart } from '../components/charts/TrendChart';
 import { TaskPieChart } from '../components/charts/TaskPieChart';
 import { HeatmapChart } from '../components/charts/HeatmapChart';
@@ -21,6 +22,12 @@ export const Analytics = () => {
   const loading = useStore((state) => state.loading);
   const loadData = useStore((state) => state.loadData);
   const [days, setDays] = useState(7);
+  // 自定义日期区间
+  const [customRange, setCustomRange] = useState(null); // null 或 { startDate, endDate }
+  const [isCustomPickerOpen, setIsCustomPickerOpen] = useState(false);
+  const [tempStartDate, setTempStartDate] = useState('');
+  const [tempEndDate, setTempEndDate] = useState('');
+  
   const [metrics, setMetrics] = useState(null);
   const [trendData, setTrendData] = useState([]);
   const [earnHeatmapData, setEarnHeatmapData] = useState([]);
@@ -43,25 +50,26 @@ export const Analytics = () => {
 
   // 计算数据
   useEffect(() => {
-    console.log('[Analytics] 开始计算数据', { logsLength: logs?.length, days });
+    console.log('[Analytics] 开始计算数据', { logsLength: logs?.length, days, customRange });
     if (logs && logs.length > 0) {
       try {
-        const metricsData = calculateMetrics(logs, days);
+        const range = customRange || null;
+        const metricsData = calculateMetrics(logs, days, range);
         setMetrics(metricsData);
         setRedeemMinutes(metricsData.redeemMinutes?.value || 0);
-        setTrendData(calculateDailyTrend(logs, days));
-        setEarnHeatmapData(calculateHeatmapData(logs, days, 'EARN'));
-        setRedeemHeatmapData(calculateHeatmapData(logs, days, 'REDEEM'));
-        setTaskDistribution(calculateTaskDistribution(logs, days));
-        setHealthScore(calculateHealthScore(logs, days));
-        setRedeemTimeAnalysis(calculateRedeemTimeAnalysis(logs, days));
-        setDailyGameTime(calculateDailyGameTime(logs, days));
+        setTrendData(calculateDailyTrend(logs, days, range));
+        setEarnHeatmapData(calculateHeatmapData(logs, days, 'EARN', range));
+        setRedeemHeatmapData(calculateHeatmapData(logs, days, 'REDEEM', range));
+        setTaskDistribution(calculateTaskDistribution(logs, days, range));
+        setHealthScore(calculateHealthScore(logs, days, range));
+        setRedeemTimeAnalysis(calculateRedeemTimeAnalysis(logs, days, range));
+        setDailyGameTime(calculateDailyGameTime(logs, days, range));
         console.log('[Analytics] 数据计算完成');
       } catch (err) {
         console.error('[Analytics] 计算错误:', err);
       }
     }
-  }, [logs, days]);
+  }, [logs, days, customRange]);
 
   console.log('[Analytics] 渲染', { loading, logsLength: logs?.length, hasMetrics: !!metrics });
 
@@ -135,30 +143,93 @@ export const Analytics = () => {
       {/* 日期筛选器 */}
       <div className="mb-3 flex gap-1.5 overflow-x-auto pb-1">
         <button
-          onClick={() => setDays(7)}
-          className={`px-3 py-1.5 rounded text-xs whitespace-nowrap ${days === 7 ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
+          onClick={() => { setDays(7); setCustomRange(null); setIsCustomPickerOpen(false); }}
+          className={`px-3 py-1.5 rounded text-xs whitespace-nowrap ${days === 7 && !customRange ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
         >
           7 天
         </button>
         <button
-          onClick={() => setDays(14)}
-          className={`px-3 py-1.5 rounded text-xs whitespace-nowrap ${days === 14 ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
+          onClick={() => { setDays(14); setCustomRange(null); setIsCustomPickerOpen(false); }}
+          className={`px-3 py-1.5 rounded text-xs whitespace-nowrap ${days === 14 && !customRange ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
         >
           14 天
         </button>
         <button
-          onClick={() => setDays(30)}
-          className={`px-3 py-1.5 rounded text-xs whitespace-nowrap ${days === 30 ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
+          onClick={() => { setDays(30); setCustomRange(null); setIsCustomPickerOpen(false); }}
+          className={`px-3 py-1.5 rounded text-xs whitespace-nowrap ${days === 30 && !customRange ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
         >
           30 天
         </button>
         <button
-          onClick={() => setDays(null)}
-          className={`px-3 py-1.5 rounded text-xs whitespace-nowrap ${days === null ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
+          onClick={() => { setDays(null); setCustomRange(null); setIsCustomPickerOpen(false); }}
+          className={`px-3 py-1.5 rounded text-xs whitespace-nowrap ${days === null && !customRange ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
         >
           全部
         </button>
+        <button
+          onClick={() => {
+            if (customRange) {
+              setCustomRange(null);
+              setIsCustomPickerOpen(false);
+              setDays(7);
+            } else {
+              setIsCustomPickerOpen(!isCustomPickerOpen);
+            }
+          }}
+          className={`px-3 py-1.5 rounded text-xs whitespace-nowrap ${customRange || isCustomPickerOpen ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'}`}
+        >
+          {customRange ? '📅 自定义中' : '📅 自定义'}
+        </button>
       </div>
+
+      {/* 自定义日期区间选择器 */}
+      {isCustomPickerOpen && (
+        <div className="mb-3 bg-gray-800 rounded-lg p-3">
+          <div className="flex items-center gap-2 mb-2">
+            <label className="text-xs text-gray-400">起</label>
+            <input
+              type="date"
+              value={tempStartDate}
+              onChange={e => setTempStartDate(e.target.value)}
+              className="bg-gray-700 text-white text-sm px-2 py-1 rounded border border-gray-600"
+            />
+            <span className="text-gray-500">→</span>
+            <label className="text-xs text-gray-400">止</label>
+            <input
+              type="date"
+              value={tempEndDate}
+              onChange={e => setTempEndDate(e.target.value)}
+              className="bg-gray-700 text-white text-sm px-2 py-1 rounded border border-gray-600"
+            />
+            <button
+              onClick={() => {
+                if (tempStartDate && tempEndDate) {
+                  setDays(null);
+                  setCustomRange({ startDate: tempStartDate, endDate: tempEndDate });
+                  setIsCustomPickerOpen(false);
+                }
+              }}
+              disabled={!tempStartDate || !tempEndDate}
+              className="ml-auto px-3 py-1 rounded text-xs font-semibold disabled:opacity-40 bg-blue-600 hover:bg-blue-500"
+            >
+              确认
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 自定义区间提示 */}
+      {customRange && (
+        <div className="mb-3 bg-blue-900/40 rounded-lg p-2 flex items-center justify-between">
+          <span className="text-xs text-blue-300">📅 {customRange.startDate} → {customRange.endDate}</span>
+          <button
+            onClick={() => { setCustomRange(null); setDays(7); }}
+            className="text-xs text-blue-400 hover:text-blue-300"
+          >
+            取消
+          </button>
+        </div>
+      )}
 
       {/* 核心指标卡 - 2x2 网格 */}
       {metrics && (

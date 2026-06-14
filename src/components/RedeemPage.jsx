@@ -7,6 +7,7 @@ export default function RedeemPage() {
     const logs = useStore((s) => s.logs);
     const redeemPoints = useStore((s) => s.redeemPoints);
     const [confirmTier, setConfirmTier] = useState(null);
+    const [bracesCheck, setBracesCheck] = useState(false);
 
     const todayRedeemed = getTodayRedeemedMinutes(logs);
     const dailyLimit = getDailyLimit();
@@ -17,6 +18,16 @@ export default function RedeemPage() {
         if (!confirmTier) return;
         redeemPoints(confirmTier);
         setConfirmTier(null);
+        setBracesCheck(false);
+    };
+
+    const handleConfirmClick = () => {
+        setBracesCheck(true);
+    };
+
+    const handleBracesConfirm = () => {
+        setBracesCheck(false);
+        handleRedeem();
     };
 
     return (
@@ -147,9 +158,50 @@ export default function RedeemPage() {
                             </button>
                             <button
                                 className="btn-primary flex-1"
-                                onClick={handleRedeem}
+                                onClick={handleConfirmClick}
                             >
                                 确认兑换 ✈️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ===== 牙套确认弹窗 ===== */}
+            {bracesCheck && confirmTier && (
+                <div
+                    className="fixed inset-0 z-[210] flex items-center justify-center bg-black/60 overlay-enter"
+                    onClick={() => setBracesCheck(false)}
+                >
+                    <div
+                        className="modal-enter mx-6 w-full max-w-sm rounded-2xl p-6"
+                        style={{ background: 'linear-gradient(135deg, #16213e, #1a1a2e)' }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="text-center mb-5">
+                            <div className="text-5xl mb-3">😬</div>
+                            <h3 className="text-white text-xl font-bold mb-2">牙套确认</h3>
+                            <p className="text-cloud-dark text-sm">
+                                兑换 <span className="text-sky font-bold">{confirmTier.totalMinutes}分钟</span> 游戏时间前
+                            </p>
+                            <p className="text-gold text-base font-bold mt-2">
+                                请确认已戴好牙套 ✅
+                            </p>
+                        </div>
+
+                        <div className="flex gap-3">
+                            <button
+                                className="btn-secondary flex-1"
+                                onClick={() => setBracesCheck(false)}
+                            >
+                                还没戴
+                            </button>
+                            <button
+                                className="btn-primary flex-1"
+                                style={{ background: 'linear-gradient(135deg, #4caf50, #66bb6a)' }}
+                                onClick={handleBracesConfirm}
+                            >
+                                已戴好，兑换！✅
                             </button>
                         </div>
                     </div>
