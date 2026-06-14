@@ -90,6 +90,7 @@ const useStore = create((set, get) => ({
     tasks: DEFAULT_TASKS,
     logs: [],
     timers: [],
+    config: { dailyExchangeLimitWeekday: 60, dailyExchangeLimitHoliday: 90, notifyOnExpire: true },
     loading: true,
     error: null,
 
@@ -138,6 +139,7 @@ const useStore = create((set, get) => ({
                 tasks: data.tasks || DEFAULT_TASKS,
                 logs: data.logs || [],
                 timers: data.timers || [],
+                config: data.config || get().config,
                 loading: false,
             });
             console.log('[TimeBank] ✅ 数据加载成功');
@@ -333,6 +335,24 @@ const useStore = create((set, get) => ({
             }
         } catch (error) {
             console.error('[TimeBank] 调整余额失败:', error);
+        }
+    },
+
+    // === 切换到站后台通知开关（持久化到 config）===
+    setNotifyOnExpire: async (enabled) => {
+        const state = get();
+        const config = { ...state.config, notifyOnExpire: enabled };
+        set({ config });
+        try {
+            await api.saveData({
+                balance: state.balance,
+                tasks: state.tasks,
+                logs: state.logs,
+                timers: state.timers,
+                config,
+            });
+        } catch (error) {
+            console.error('[TimeBank] 保存提醒开关失败:', error);
         }
     },
 

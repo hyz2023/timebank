@@ -8,6 +8,7 @@ import LogsPage from './components/LogsPage';
 import AdminPanel from './components/AdminPanel';
 import PointsAnimation from './components/PointsAnimation';
 import Analytics from './pages/Analytics';
+import useTimerChime from './hooks/useTimerChime';
 
 const TABS = [
     { id: 'earn', label: '任务', icon: '🎯' },
@@ -25,11 +26,18 @@ export default function App() {
     const loading = useStore((s) => s.loading);
     const error = useStore((s) => s.error);
     const timers = useStore((s) => s.timers);
+    const { arrivedCount, dismiss } = useTimerChime(timers);
 
     // === 初始化：从服务端加载数据 ===
     useEffect(() => {
         loadData();
     }, [loadData]);
+
+    // 来自系统通知点击：?tab=timer 直接切到计时页
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('tab') === 'timer') setActiveTab('timer');
+    }, []);
 
     // === 每小时刷新数据 ===
     useEffect(() => {
@@ -160,6 +168,17 @@ export default function App() {
                     </button>
                 ))}
             </nav>
+
+            {/* ===== 到站提示横幅 ===== */}
+            {arrivedCount > 0 && (
+                <button
+                    onClick={dismiss}
+                    className="fixed top-3 left-1/2 -translate-x-1/2 z-[60] bg-sunset text-white font-bold text-sm px-5 py-2.5 rounded-full shadow-lg animate-bounce"
+                    style={{ maxWidth: '90vw' }}
+                >
+                    ✈️ {arrivedCount} 个飞行已到站 · 点此停止
+                </button>
+            )}
 
             {/* ===== 积分获得动画 ===== */}
             {pointsAnim && (

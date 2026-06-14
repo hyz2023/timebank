@@ -154,3 +154,25 @@ describe('clearExpiredTimers 保留暂停计时器 (回归)', () => {
     expect(next.timers.map((t) => t.id).sort()).toEqual(['active', 'paused'])
   })
 })
+
+import { setTimerSchedule } from '../lib/operations.js'
+
+describe('setTimerSchedule', () => {
+  it('给指定计时器写入 scheduleId', () => {
+    const data = { timers: [{ id: 'a' }, { id: 'b' }] }
+    const out = setTimerSchedule(data, 'b', 'msg_1')
+    expect(out.timers.find((t) => t.id === 'b').scheduleId).toBe('msg_1')
+    expect(out.timers.find((t) => t.id === 'a').scheduleId).toBeUndefined()
+  })
+  it('可清空 scheduleId（传 null）', () => {
+    const data = { timers: [{ id: 'a', scheduleId: 'x' }] }
+    const out = setTimerSchedule(data, 'a', null)
+    expect(out.timers[0].scheduleId).toBe(null)
+  })
+})
+
+describe('getDefaultData config', () => {
+  it('默认开启到站提醒', () => {
+    expect(getDefaultData(TODAY).config.notifyOnExpire).toBe(true)
+  })
+})
