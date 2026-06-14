@@ -336,6 +336,24 @@ const useStore = create((set, get) => ({
         }
     },
 
+    // === 切换到站后台通知开关（持久化到 config）===
+    setNotifyOnExpire: async (enabled) => {
+        const state = get();
+        const config = { ...state.config, notifyOnExpire: enabled };
+        set({ config });
+        try {
+            await api.saveData({
+                balance: state.balance,
+                tasks: state.tasks,
+                logs: state.logs,
+                timers: state.timers,
+                config,
+            });
+        } catch (error) {
+            console.error('[TimeBank] 保存提醒开关失败:', error);
+        }
+    },
+
     // === 数据导出 ===
     exportData: () => {
         const state = get();

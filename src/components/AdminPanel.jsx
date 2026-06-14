@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import useStore from '../store';
 import { CATEGORIES } from '../engine';
+import { enablePush, pushSupported, isIos, isStandalone } from '../utils/push-client';
 
 export default function AdminPanel({ onClose }) {
     const tasks = useStore((s) => s.tasks);
@@ -28,6 +29,20 @@ export default function AdminPanel({ onClose }) {
     const [editingIcon, setEditingIcon] = useState({}); // 本地图标编辑状态
     const [editingCategory, setEditingCategory] = useState({}); // 本地分类编辑状态
     const fileInputRef = useRef(null);
+    const config = useStore((s) => s.config);
+    const setNotifyOnExpire = useStore((s) => s.setNotifyOnExpire);
+    const [pushMsg, setPushMsg] = useState('');
+    const iosNeedsInstall = isIos() && !isStandalone();
+
+    const handleEnablePush = async () => {
+        setPushMsg('正在开启…');
+        try {
+            await enablePush();
+            setPushMsg('✅ 已开启后台到站提醒');
+        } catch (e) {
+            setPushMsg('❌ ' + (e?.message || '开启失败'));
+        }
+    };
 
     const handleExport = () => {
         const data = exportData();
@@ -452,6 +467,35 @@ export default function AdminPanel({ onClose }) {
                                     {importMsg && (
                                         <p className="text-sm text-center mt-2">{importMsg}</p>
                                     )}
+                                </div>
+                            </div>
+
+                            <div className="card-comic">
+                                <div className="relative z-10 space-y-3">
+                                    <h3 className="text-sky font-bold text-sm">🔔 到站提醒</h3>
+
+                                    <label className="flex items-center justify-between text-sm text-cloud">
+                                        <span>后台系统通知（锁屏/切走时）</span>
+                                        <input
+                                            type="checkbox"
+                                            checked={config?.notifyOnExpire !== false}
+                                            onChange={(e) => setNotifyOnExpire(e.target.checked)}
+                                        />
+                                    </label>
+
+                                    {iosNeedsInstall ? (
+                                        <p className="text-xs text-cloud-dark leading-relaxed">
+                                            📱 iPhone/iPad 需先把本应用「添加到主屏幕」：点浏览器分享按钮 → 添加到主屏幕 → 从主屏幕图标打开后，再回到这里开启提醒。
+                                        </p>
+                                    ) : pushSupported() ? (
+                                        <button className="btn-primary w-full" onClick={handleEnablePush}>
+                                            开启本设备的到站提醒
+                                        </button>
+                                    ) : (
+                                        <p className="text-xs text-cloud-dark">当前环境不支持后台通知。</p>
+                                    )}
+
+                                    {pushMsg && <p className="text-xs text-cloud-dark">{pushMsg}</p>}
                                 </div>
                             </div>
                         </div>
