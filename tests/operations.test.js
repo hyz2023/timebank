@@ -110,3 +110,31 @@ describe('timers', () => {
     expect(t.remainingMs).toBe(null)
   })
 })
+
+import { addTask, updateTask, removeTask } from '../lib/operations.js'
+
+describe('task CRUD', () => {
+  it('addTask 追加新任务并带默认值', () => {
+    const data = getDefaultData(TODAY)
+    const { data: next, result } = addTask(data, { name: '阅读' }, TODAY, 999)
+    expect(next.tasks).toHaveLength(9)
+    expect(result.id).toBe('t_999')
+    expect(result.basePoints).toBe(4)
+    expect(result.bonusPoints).toBe(2)
+    expect(result.lastUpdate).toBe(TODAY)
+  })
+  it('updateTask 合并字段', () => {
+    const data = getDefaultData(TODAY)
+    const { data: next, result } = updateTask(data, 't1', { basePoints: 7 })
+    expect(result.basePoints).toBe(7)
+    expect(next.tasks.find((t) => t.id === 't1').basePoints).toBe(7)
+  })
+  it('updateTask 任务不存在抛 404', () => {
+    expect(() => updateTask(getDefaultData(TODAY), 'nope', {})).toThrow(/不存在/)
+  })
+  it('removeTask 删除任务', () => {
+    const { data: next } = removeTask(getDefaultData(TODAY), 't1')
+    expect(next.tasks.find((t) => t.id === 't1')).toBeUndefined()
+    expect(next.tasks).toHaveLength(7)
+  })
+})
