@@ -15,7 +15,7 @@
 spec §8 写的是「QStash 签名验证」。本计划改用**共享密钥 token**鉴权 `/api/push/fire`：
 
 - 原因：QStash 的 `Receiver.verify` 需要**原始请求体**，而 Vercel 朴素 Node 函数会自动解析 body、拿原始体不稳定，易出错。
-- 做法：服务端构造回调 URL 时带上只有服务端与 QStash 知道的 `?token=<PUSH_FIRE_SECRET>`，fire 端校验该 token。安全等价（密钥不暴露给前端，最坏后果仅一条误报通知），且实现稳健。
+- 做法：服务端排程时通过 QStash 的转发头把只有服务端与 QStash 知道的密钥发给回调端（`publishJSON({ headers: { 'x-fire-token': PUSH_FIRE_SECRET } })`，QStash 自动加 `Upstash-Forward-` 前缀转发到目标），fire 端校验请求头 `x-fire-token`。密钥**不进 URL**（避免出现在日志/QStash 消息记录里），也不暴露给前端，最坏后果仅一条误报通知，实现稳健。
 - 因此**不需要** `QSTASH_CURRENT_SIGNING_KEY` / `QSTASH_NEXT_SIGNING_KEY`。
 
 `notBefore` 单位：QStash TS SDK 的 `publishJSON({ notBefore })` 取 **Unix 秒**（非毫秒）。
@@ -684,8 +684,8 @@ import { configureVapid, sendToAll } from '../../lib/webpush.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' })
-  // 共享密钥鉴权：仅服务端构造的 QStash 回调 URL 才知道该 token
-  const token = req.query?.token
+  // 共享密钥鉴权：密钥经 QStash 转发头 x-fire-token 传来，不在 URL 里
+  const token = req.headers['x-fire-token']
   if (!process.env.PUSH_FIRE_SECRET || token !== process.env.PUSH_FIRE_SECRET) {
     return res.status(401).json({ error: '未授权' })
   }

@@ -9,8 +9,8 @@ describe('toNotBeforeSeconds', () => {
 })
 
 describe('buildFireUrl', () => {
-  it('拼出带 timerId 与 token 的回调地址', () => {
-    const u = buildFireUrl('https://x.app', 'timer_9', 'sek')
-    expect(u).toBe('https://x.app/api/push/fire?timerId=timer_9&token=sek')
+  it('拼出带 timerId 的回调地址（密钥不入 URL）', () => {
+    const u = buildFireUrl('https://x.app', 'timer_9')
+    expect(u).toBe('https://x.app/api/push/fire?timerId=timer_9')
   })
 })
