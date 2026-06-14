@@ -14,7 +14,10 @@ const delay = (ms) => new Promise((r) => setTimeout(r, ms))
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' })
 
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown'
+  // 用 Vercel 边缘设置的可信头取真实 IP；客户端无法伪造 x-real-ip。
+  // 退而取 X-Forwarded-For 最右一项（可信代理追加的那个），避免用客户端可控的最左项。
+  const xff = (req.headers['x-forwarded-for'] || '').split(',').map((s) => s.trim()).filter(Boolean)
+  const ip = req.headers['x-real-ip'] || xff[xff.length - 1] || req.socket?.remoteAddress || 'unknown'
   const gate = await checkLoginRate(ip)
   if (!gate.allowed) return res.status(429).json({ error: '尝试过于频繁，请稍后再试' })
 
