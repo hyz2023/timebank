@@ -187,7 +187,8 @@ const useStore = create((set, get) => ({
             await api.clearExpiredTimers();
             const now = Date.now();
             set((state) => ({
-                timers: state.timers.filter((t) => t.endTime > now),
+                // 暂停中的计时器 (endTime 为 null) 不算过期，保留
+                timers: state.timers.filter((t) => t.paused || t.endTime > now),
             }));
         } catch (error) {
             console.error('[TimeBank] 清除定时器失败:', error);
@@ -298,6 +299,7 @@ const useStore = create((set, get) => ({
             balance: state.balance,
             tasks: state.tasks,
             logs: state.logs,
+            timers: state.timers,
             config: state.config,
             exportedAt: new Date().toISOString(),
         }, null, 2);

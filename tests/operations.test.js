@@ -138,3 +138,19 @@ describe('task CRUD', () => {
     expect(next.tasks).toHaveLength(7)
   })
 })
+
+describe('clearExpiredTimers 保留暂停计时器 (回归)', () => {
+  it('暂停中的计时器 (endTime=null) 不被清除', () => {
+    const data = {
+      ...getDefaultData(TODAY),
+      timers: [
+        { id: 'expired', endTime: 5000 },
+        { id: 'paused', endTime: null, paused: true, remainingMs: 30000 },
+        { id: 'active', endTime: 99999 },
+      ],
+    }
+    const { data: next, result } = clearExpiredTimers(data, 10000)
+    expect(result.removed).toBe(1)
+    expect(next.timers.map((t) => t.id).sort()).toEqual(['active', 'paused'])
+  })
+})
