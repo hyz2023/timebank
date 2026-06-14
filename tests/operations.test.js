@@ -60,3 +60,53 @@ describe('adjustBalance', () => {
     expect(result.newBalance).toBe(0)
   })
 })
+
+import { redeem, clearExpiredTimers, pauseTimer, resumeTimer } from '../lib/operations.js'
+
+const TIER = { id: 'basic', label: '短途飞行', cost: 10, baseMinutes: 15, totalMinutes: 15 }
+
+describe('redeem', () => {
+  it('余额足够时扣分并生成计时器', () => {
+    const data = { ...getDefaultData(TODAY), balance: 20 }
+    const { data: next, result } = redeem(data, TIER, 1000)
+    expect(result.newBalance).toBe(10)
+    expect(result.timer.minutes).toBe(15)
+    expect(result.timer.endTime).toBe(1000 + 15 * 60 * 1000)
+    expect(next.logs[0].type).toBe('REDEEM')
+    expect(next.timers).toHaveLength(1)
+  })
+  it('余额不足抛 400', () => {
+    const data = { ...getDefaultData(TODAY), balance: 5 }
+    expect(() => redeem(data, TIER, 1000)).toThrow(/积分不足/)
+  })
+})
+
+describe('timers', () => {
+  const base = () => ({
+    ...getDefaultData(TODAY),
+    timers: [
+      { id: 'a', endTime: 5000, label: 'x' },
+      { id: 'b', endTime: 50000, label: 'y' },
+    ],
+  })
+  it('clearExpiredTimers 移除已过期', () => {
+    const { data: next, result } = clearExpiredTimers(base(), 10000)
+    expect(result.removed).toBe(1)
+    expect(next.timers.map((t) => t.id)).toEqual(['b'])
+  })
+  it('pauseTimer 记录剩余并清空 endTime', () => {
+    const { data: next } = pauseTimer(base(), 'b', 10000)
+    const t = next.timers.find((x) => x.id === 'b')
+    expect(t.paused).toBe(true)
+    expect(t.remainingMs).toBe(40000)
+    expect(t.endTime).toBe(null)
+  })
+  it('resumeTimer 用 now + remaining 恢复 endTime', () => {
+    const paused = pauseTimer(base(), 'b', 10000).data
+    const { data: next } = resumeTimer(paused, 'b', 20000)
+    const t = next.timers.find((x) => x.id === 'b')
+    expect(t.paused).toBe(false)
+    expect(t.endTime).toBe(60000)
+    expect(t.remainingMs).toBe(null)
+  })
+})
