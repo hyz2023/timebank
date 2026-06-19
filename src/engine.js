@@ -1,14 +1,27 @@
 // TimeBank 核心积分计算引擎
 
 /**
- * 任务分类配置
+ * 默认任务分类配置
+ * 当数据文件中没有自定义分类时，使用此默认值。
  */
-export const CATEGORIES = {
+export const DEFAULT_CATEGORIES = {
     english: { label: '英语', icon: '🔤', order: 1 },
     math:    { label: '数学', icon: '🔢', order: 2 },
     chinese: { label: '语文', icon: '📝', order: 3 },
     other:   { label: '其他', icon: '📌', order: 4 },
 };
+
+/**
+ * 分类配置（可被 store 覆盖）
+ */
+export let CATEGORIES = { ...DEFAULT_CATEGORIES };
+
+/**
+ * 更新运行时分类配置
+ */
+export function setCategories(categories) {
+    CATEGORIES = categories ? { ...categories } : { ...DEFAULT_CATEGORIES };
+}
 
 /**
  * 排序模式
@@ -129,12 +142,14 @@ export const isHoliday = (date = new Date()) => {
 
 /**
  * 获取今日兑换限额
- * 工作日 60 分钟，法定节假日 90 分钟
+ * 2026-06-20 起统一 360 分钟，此前：工作日 60 分钟，法定节假日 90 分钟
  */
 export const getDailyLimit = () => {
     // 使用北京时间（UTC+8）取日期
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    // 2026-06-20 起，每日限额调整为 6 小时（360 分钟）
+    if (today >= '2026-06-20') return 360;
     // 临时特例：2026-05-27 限额 150 分钟（仅今天）
     if (today === '2026-05-27') return 150;
     return isHoliday() ? 90 : 60;

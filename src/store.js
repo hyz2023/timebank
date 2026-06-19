@@ -90,7 +90,7 @@ const useStore = create((set, get) => ({
     tasks: DEFAULT_TASKS,
     logs: [],
     timers: [],
-    config: { dailyExchangeLimitWeekday: 60, dailyExchangeLimitHoliday: 90, notifyOnExpire: true },
+    config: { dailyExchangeLimitWeekday: 360, dailyExchangeLimitHoliday: 360, notifyOnExpire: true },
     loading: true,
     error: null,
 

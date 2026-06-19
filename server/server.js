@@ -26,8 +26,8 @@ if (!fs.existsSync(path.join(__dirname, 'data'))) {
 }
 
 // 初始化数据文件
-// 分类配置
-const CATEGORIES = {
+// 默认分类配置
+const DEFAULT_CATEGORIES = {
     english: { label: '英语', icon: '🔤', order: 1 },
     math:    { label: '数学', icon: '🔢', order: 2 },
     chinese: { label: '语文', icon: '📝', order: 3 },
@@ -66,8 +66,8 @@ const getDefaultData = () => ({
     ],
     logs: [],
     config: {
-        dailyExchangeLimitWeekday: 60,
-        dailyExchangeLimitHoliday: 90,
+        dailyExchangeLimitWeekday: 360,
+        dailyExchangeLimitHoliday: 360,
     },
 });
 
