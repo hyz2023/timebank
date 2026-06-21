@@ -23,6 +23,8 @@ export default function AdminPanel({ onClose }) {
     const [newTaskDesc, setNewTaskDesc] = useState('');
     const [newTaskCategory, setNewTaskCategory] = useState('other');
     const [importMsg, setImportMsg] = useState('');
+    const [balanceSubmitting, setBalanceSubmitting] = useState(false);
+    const [balanceMsg, setBalanceMsg] = useState('');
     const [editingDesc, setEditingDesc] = useState({}); // 本地编辑状态
     const [editingPoints, setEditingPoints] = useState({}); // 本地积分编辑状态
     const [editingName, setEditingName] = useState({}); // 本地任务名编辑状态
@@ -154,6 +156,24 @@ export default function AdminPanel({ onClose }) {
             }
             return next;
         });
+    };
+
+    const handleAdjustBalance = async (amount) => {
+        const amt = parseFloat(amount);
+        if (balanceSubmitting || isNaN(amt) || amt === 0) return;
+        setBalanceSubmitting(true);
+        setBalanceMsg('');
+        try {
+            await adjustBalance(amt);
+            setAdjustAmount('');
+            const label = amt > 0 ? `增加 ${amt} 分` : `扣减 ${Math.abs(amt)} 分`;
+            setBalanceMsg(`✅ 已${label}，请勿重复点击`);
+            window.setTimeout(() => setBalanceMsg(''), 2600);
+        } catch (e) {
+            setBalanceMsg(`❌ 调整失败：${e?.message || '请稍后重试'}`);
+        } finally {
+            setBalanceSubmitting(false);
+        }
     };
 
     const sections = [
@@ -373,6 +393,11 @@ export default function AdminPanel({ onClose }) {
                             <div className="relative z-10">
                                 <p className="text-sm text-cloud-dark mb-2">当前余额</p>
                                 <p className="text-3xl font-black text-gold mb-4">{balance} pts</p>
+                                {balanceMsg && (
+                                    <div className={`mb-3 rounded-xl px-3 py-2 text-sm font-bold ${balanceMsg.startsWith('✅') ? 'bg-green/15 text-green border border-green/20' : 'bg-red/15 text-red border border-red/20'}`}>
+                                        {balanceMsg}
+                                    </div>
+                                )}
 
                                 <label className="text-xs text-cloud-dark block mb-1">调整数额（正数加分，负数减分）</label>
                                 <div className="flex gap-2">
@@ -382,18 +407,14 @@ export default function AdminPanel({ onClose }) {
                                         placeholder="例如: 10 或 -5"
                                         value={adjustAmount}
                                         onChange={(e) => setAdjustAmount(e.target.value)}
+                                        disabled={balanceSubmitting}
                                     />
                                     <button
-                                        className="btn-primary text-sm whitespace-nowrap flex-[1] max-w-fit"
-                                        onClick={() => {
-                                            const amt = parseFloat(adjustAmount);
-                                            if (!isNaN(amt) && amt !== 0) {
-                                                adjustBalance(amt);
-                                                setAdjustAmount('');
-                                            }
-                                        }}
+                                        className="btn-primary text-sm whitespace-nowrap flex-[1] max-w-fit disabled:opacity-60"
+                                        onClick={() => handleAdjustBalance(adjustAmount)}
+                                        disabled={balanceSubmitting}
                                     >
-                                        调整
+                                        {balanceSubmitting ? '调整中…' : '调整'}
                                     </button>
                                 </div>
 
@@ -401,13 +422,12 @@ export default function AdminPanel({ onClose }) {
                                     {[5, 10, 20, -5, -10].map((v) => (
                                         <button
                                             key={v}
-                                            className={`flex-1 text-xs py-2 rounded-lg font-bold ${v > 0
+                                            className={`flex-1 text-xs py-2 rounded-lg font-bold disabled:opacity-60 ${v > 0
                                                     ? 'bg-green/15 text-green border border-green/20'
                                                     : 'bg-red/15 text-red border border-red/20'
                                                 }`}
-                                            onClick={() => {
-                                                adjustBalance(v);
-                                            }}
+                                            onClick={() => handleAdjustBalance(v)}
+                                            disabled={balanceSubmitting}
                                         >
                                             {v > 0 ? '+' : ''}{v}
                                         </button>
