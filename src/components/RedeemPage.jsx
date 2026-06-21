@@ -8,30 +8,51 @@ export default function RedeemPage() {
     const redeemPoints = useStore((s) => s.redeemPoints);
     const [confirmTier, setConfirmTier] = useState(null);
     const [bracesCheck, setBracesCheck] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [successMsg, setSuccessMsg] = useState('');
 
     const todayRedeemed = getTodayRedeemedMinutes(logs);
     const dailyLimit = getDailyLimit();
     const remaining = Math.max(0, dailyLimit - todayRedeemed);
     const isHolidayToday = isHoliday();
 
-    const handleRedeem = () => {
-        if (!confirmTier) return;
-        redeemPoints(confirmTier);
-        setConfirmTier(null);
-        setBracesCheck(false);
+    const showSuccess = (message) => {
+        setSuccessMsg(message);
+        window.setTimeout(() => setSuccessMsg(''), 2200);
+    };
+
+    const handleRedeem = async () => {
+        if (!confirmTier || submitting) return;
+        const tier = confirmTier;
+        setSubmitting(true);
+        try {
+            const timer = await redeemPoints(tier);
+            if (timer) {
+                setConfirmTier(null);
+                setBracesCheck(false);
+                showSuccess(`✅ 已兑换 ${tier.totalMinutes} 分钟，请勿重复点击`);
+            }
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const handleConfirmClick = () => {
+        if (submitting) return;
         setBracesCheck(true);
     };
 
     const handleBracesConfirm = () => {
-        setBracesCheck(false);
         handleRedeem();
     };
 
     return (
         <div className="space-y-4">
+            {successMsg && (
+                <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[320] rounded-full bg-green px-5 py-2.5 text-sm font-bold text-white shadow-lg">
+                    {successMsg}
+                </div>
+            )}
             {/* 今日额度信息 */}
             <div className="card-comic">
                 <div className="relative z-10">
@@ -72,7 +93,7 @@ export default function RedeemPage() {
 
             {EXCHANGE_TIERS.map((tier) => {
                 const check = canRedeem(tier, balance, logs);
-                const disabled = !check.ok;
+                const disabled = !check.ok || submitting;
 
                 return (
                     <button
@@ -107,7 +128,7 @@ export default function RedeemPage() {
 
                                 <div className="text-right shrink-0">
                                     {disabled ? (
-                                        <span className="text-xs text-red">{check.reason}</span>
+                                        <span className="text-xs text-red">{submitting ? '正在兑换…' : check.reason}</span>
                                     ) : (
                                         <div className="text-sky text-sm font-bold">兑换 →</div>
                                     )}
@@ -122,7 +143,7 @@ export default function RedeemPage() {
             {confirmTier && (
                 <div
                     className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 overlay-enter"
-                    onClick={() => setConfirmTier(null)}
+                    onClick={() => !submitting && setConfirmTier(null)}
                 >
                     <div
                         className="modal-enter mx-6 w-full max-w-sm rounded-2xl p-6"
@@ -152,15 +173,17 @@ export default function RedeemPage() {
                         <div className="flex gap-3">
                             <button
                                 className="btn-secondary flex-1"
-                                onClick={() => setConfirmTier(null)}
+                                onClick={() => !submitting && setConfirmTier(null)}
+                                disabled={submitting}
                             >
                                 取消
                             </button>
                             <button
                                 className="btn-primary flex-1"
                                 onClick={handleConfirmClick}
+                                disabled={submitting}
                             >
-                                确认兑换 ✈️
+                                {submitting ? '正在兑换…' : '确认兑换 ✈️'}
                             </button>
                         </div>
                     </div>
@@ -171,7 +194,7 @@ export default function RedeemPage() {
             {bracesCheck && confirmTier && (
                 <div
                     className="fixed inset-0 z-[210] flex items-center justify-center bg-black/60 overlay-enter"
-                    onClick={() => setBracesCheck(false)}
+                    onClick={() => !submitting && setBracesCheck(false)}
                 >
                     <div
                         className="modal-enter mx-6 w-full max-w-sm rounded-2xl p-6"
@@ -192,7 +215,8 @@ export default function RedeemPage() {
                         <div className="flex gap-3">
                             <button
                                 className="btn-secondary flex-1"
-                                onClick={() => setBracesCheck(false)}
+                                onClick={() => !submitting && setBracesCheck(false)}
+                                disabled={submitting}
                             >
                                 还没戴
                             </button>
@@ -200,8 +224,9 @@ export default function RedeemPage() {
                                 className="btn-primary flex-1"
                                 style={{ background: 'linear-gradient(135deg, #4caf50, #66bb6a)' }}
                                 onClick={handleBracesConfirm}
+                                disabled={submitting}
                             >
-                                已戴好，兑换！✅
+                                {submitting ? '正在兑换…' : '已戴好，兑换！✅'}
                             </button>
                         </div>
                     </div>

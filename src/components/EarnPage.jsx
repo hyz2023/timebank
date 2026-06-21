@@ -2,15 +2,16 @@ import { useState } from 'react';
 import useStore from '../store';
 import { getDecayRate, CATEGORIES, SORT_MODES } from '../engine';
 
-function TaskCard({ task, onClick }) {
+function TaskCard({ task, onClick, disabled = false }) {
     const nextRate = getDecayRate(task.dailyCount);
     const rateColor = nextRate === 1.0 ? 'text-green' : nextRate === 0.75 ? 'text-gold' : 'text-red';
     const ratePercent = Math.round(nextRate * 100);
 
     return (
         <button
-            className="card-comic w-full text-left"
+            className={`card-comic w-full text-left ${disabled ? 'opacity-60 pointer-events-none' : ''}`}
             onClick={() => onClick(task)}
+            disabled={disabled}
         >
             <div className="relative z-10 flex items-center gap-3">
                 {/* 图标 */}
@@ -54,16 +55,33 @@ export default function EarnPage({ onPointsEarned }) {
     const setSortMode = useStore((s) => s.setSortMode);
     const earnPoints = useStore((s) => s.earnPoints);
     const [confirmTask, setConfirmTask] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+    const [successMsg, setSuccessMsg] = useState('');
 
     const sortedTasks = getSortedTasks();
 
-    const handleComplete = (taskId, isPerfect) => {
-        const points = earnPoints(taskId, isPerfect);
-        setConfirmTask(null);
-        if (onPointsEarned) onPointsEarned(points, isPerfect);
+    const showSuccess = (message) => {
+        setSuccessMsg(message);
+        window.setTimeout(() => setSuccessMsg(''), 2200);
+    };
+
+    const handleComplete = async (taskId, isPerfect) => {
+        if (submitting) return;
+        setSubmitting(true);
+        try {
+            const points = await earnPoints(taskId, isPerfect);
+            if (points > 0) {
+                setConfirmTask(null);
+                if (onPointsEarned) onPointsEarned(points, isPerfect);
+                showSuccess(`✅ 已添加 ${points} 分，请勿重复点击`);
+            }
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const handleTaskClick = (task) => {
+        if (submitting) return;
         setConfirmTask(task);
     };
 
@@ -92,7 +110,7 @@ export default function EarnPage({ onPointsEarned }) {
                     </div>
                     <div className="space-y-3">
                         {groupTasks.map(task => (
-                            <TaskCard key={task.id} task={task} onClick={handleTaskClick} />
+                            <TaskCard key={task.id} task={task} onClick={handleTaskClick} disabled={submitting} />
                         ))}
                     </div>
                 </div>
@@ -102,6 +120,11 @@ export default function EarnPage({ onPointsEarned }) {
 
     return (
         <div>
+            {successMsg && (
+                <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[320] rounded-full bg-green px-5 py-2.5 text-sm font-bold text-white shadow-lg">
+                    {successMsg}
+                </div>
+            )}
             <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                     <span className="text-lg">🎯</span>
@@ -129,7 +152,7 @@ export default function EarnPage({ onPointsEarned }) {
             {sortMode === 'category' ? renderByCategory() : (
                 <div className="space-y-3">
                     {sortedTasks.map(task => (
-                        <TaskCard key={task.id} task={task} onClick={handleTaskClick} />
+                        <TaskCard key={task.id} task={task} onClick={handleTaskClick} disabled={submitting} />
                     ))}
                 </div>
             )}
@@ -138,7 +161,7 @@ export default function EarnPage({ onPointsEarned }) {
             {confirmTask && (
                 <div
                     className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 overlay-enter"
-                    onClick={() => setConfirmTask(null)}
+                    onClick={() => !submitting && setConfirmTask(null)}
                 >
                     <div
                         className="modal-enter mx-6 w-full max-w-sm rounded-2xl p-6"
@@ -162,18 +185,20 @@ export default function EarnPage({ onPointsEarned }) {
                                     <button
                                         className="btn-secondary w-full flex items-center justify-center gap-2"
                                         onClick={() => handleComplete(confirmTask.id, false)}
+                                        disabled={submitting}
                                     >
-                                        <span>👍</span>
-                                        <span>Excellent</span>
+                                        <span>{submitting ? '⏳' : '👍'}</span>
+                                        <span>{submitting ? '正在添加...' : 'Excellent'}</span>
                                         <span className="text-xs opacity-70">+{(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount)).toFixed(2)}分</span>
                                     </button>
 
                                     <button
                                         className="btn-primary w-full flex items-center justify-center gap-2"
                                         onClick={() => handleComplete(confirmTask.id, true)}
+                                        disabled={submitting}
                                     >
-                                        <span>⭐</span>
-                                        <span>Perfect</span>
+                                        <span>{submitting ? '⏳' : '⭐'}</span>
+                                        <span>{submitting ? '正在添加...' : 'Perfect'}</span>
                                         <span className="text-xs opacity-90">+{((confirmTask.basePoints + confirmTask.bonusPoints) * getDecayRate(confirmTask.dailyCount)).toFixed(2)}分</span>
                                     </button>
                                 </>
@@ -181,16 +206,18 @@ export default function EarnPage({ onPointsEarned }) {
                                 <button
                                     className="btn-primary w-full flex items-center justify-center gap-2"
                                     onClick={() => handleComplete(confirmTask.id, false)}
+                                    disabled={submitting}
                                 >
-                                    <span>👍</span>
-                                    <span>Excellent</span>
+                                    <span>{submitting ? '⏳' : '👍'}</span>
+                                    <span>{submitting ? '正在添加...' : 'Excellent'}</span>
                                     <span className="text-xs opacity-70">+{(confirmTask.basePoints * getDecayRate(confirmTask.dailyCount)).toFixed(2)}分</span>
                                 </button>
                             )}
 
                             <button
-                                className="w-full text-center text-cloud-dark text-sm py-2"
-                                onClick={() => setConfirmTask(null)}
+                                className="w-full text-center text-cloud-dark text-sm py-2 disabled:opacity-50"
+                                onClick={() => !submitting && setConfirmTask(null)}
+                                disabled={submitting}
                             >
                                 取消
                             </button>
