@@ -271,8 +271,7 @@ export default function AdminPanel({ onClose }) {
                                                                 ? 'bg-sky/20 text-sky border border-sky/30'
                                                                 : 'bg-navy-dark text-cloud-dark border border-transparent'
                                                         }`}
-                                                        onClick={() => setEditingCategory(prev => ({ ...prev, [task.id]: key }))}
-                                                        onBlur={() => handleCategoryChange(task.id, editingCategory[task.id] ?? task.category)}
+                                                        onClick={() => handleCategoryChange(task.id, key)}
                                                     >
                                                         {cat.icon} {cat.label}
                                                     </button>

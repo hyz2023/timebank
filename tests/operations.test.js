@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
-  getDefaultData, applyDailyReset, earn, adjustBalance, OperationError,
+  getDefaultData, applyDailyReset, earn, adjustBalance, OperationError, normalizeTaskCategories,
 } from '../lib/operations.js'
 
 const TODAY = '2026-06-14'
@@ -121,7 +121,25 @@ describe('task CRUD', () => {
     expect(result.id).toBe('t_999')
     expect(result.basePoints).toBe(4)
     expect(result.bonusPoints).toBe(2)
+    expect(result.category).toBe('other')
     expect(result.lastUpdate).toBe(TODAY)
+  })
+  it('addTask 保留新增任务选择的分类', () => {
+    const data = getDefaultData(TODAY)
+    const { data: next, result } = addTask(data, { name: '学而思作业', category: 'math' }, TODAY, 1001)
+    expect(result.category).toBe('math')
+    expect(next.tasks.find((t) => t.id === 't_1001').category).toBe('math')
+  })
+  it('normalizeTaskCategories 修复历史缺失分类的学而思作业', () => {
+    const data = { ...getDefaultData(TODAY), tasks: [{ id: 't_x', name: '学而思作业' }] }
+    const next = normalizeTaskCategories(data)
+    expect(next.tasks[0].category).toBe('math')
+  })
+  it('normalizeTaskCategories 不覆盖已有合法分类', () => {
+    const data = { ...getDefaultData(TODAY), tasks: [{ id: 't_x', name: '学而思作业', category: 'english' }] }
+    const next = normalizeTaskCategories(data)
+    expect(next).toBe(data)
+    expect(next.tasks[0].category).toBe('english')
   })
   it('updateTask 合并字段', () => {
     const data = getDefaultData(TODAY)
